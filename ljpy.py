@@ -12,7 +12,7 @@
 # GNU General Public License for more details.                             	#
 #                                                                          	#
 # You should have received a copy of the GNU General Public License        	#
-# along with ljmcmd.  If not, see <http://www.gnu.org/licenses/>.          	#
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.    	#
 
 # ========================================================================= #
 # ljpy.py 	                                                             	#
@@ -54,11 +54,10 @@ also refer to the included documentation.
 import sys
 
 #from ljpyclasses import simulation, site, props
-from src.ljpyclasses import simulation, site, props
+#from src.ljpyclasses import site
 from src.read_input import readinput
-
-
-
+from src.initialize_positions import initializepositions
+from src.initialize_files import initializefiles
         
 # ========================================================================= #
 # Check the command line arguments for the input and output file names.     #
@@ -66,16 +65,23 @@ from src.read_input import readinput
 if len(sys.argv) != 3:
     print("This program requires two command line arguments: the path to",
           "the input file\nand the path to the output file.\n")
-    sys.exit("Error: Input arguments missing.")
+    sys.exit("Error: Invalid or missing command line arguments.")
 
 # ========================================================================= #
 # Read the input file and store the simulation parameters to an object.     #
 # ========================================================================= #
 sim=readinput(sys.argv)       
 
+# ========================================================================= #
+# Initialize or read in positions.                                          #
+# ========================================================================= #
+atom=initializepositions(sim)
 
-
-
+# ========================================================================= #
+# Initialize the output files.                                              #
+# ========================================================================= #
+initializefiles(sim,atom)
+    
 
 
 
@@ -86,6 +92,5 @@ print("sim.N = ", sim.N)
 
 
     
-atom=[]
-atom.append(site())
-print(atom[0].x)                       
+
+print(atom[17].x)                       

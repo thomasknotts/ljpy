@@ -1,4 +1,44 @@
-# Create a class for each site in the system
+# ljpyclasses is part of ljpy for Lennard Jones simulations.                #	 	                             #
+# Copyright (C) 2021 Thomas Allen Knotts IV - All Rights Reserved          	#
+#																		   	#
+# This program is free software: you can redistribute it and/or modify      #
+# it under the terms of the GNU General Public License as published by      #
+# the Free Software Foundation, either version 3 of the License, or         #
+# (at your option) any later version.                                       #
+#                                                                          	#
+# This program is distributed in the hope that it will be useful,   	 	#
+# but WITHOUT ANY WARRANTY; without even the implied warranty of           	#
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            	#
+# GNU General Public License for more details.                             	#
+#                                                                          	#
+# You should have received a copy of the GNU General Public License        	#
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.   	#
+
+# ========================================================================= #
+# ljpyclasses.py                                                         	#
+#                                                                          	#
+# Thomas A. Knotts IV                                                      	#
+# Brigham Young University                                                 	#
+# Department of Chemical Engineering                                       	#
+# Provo, UT  84606                                                         	#
+# Email: thomas.knotts@byu.edu                                             	#
+# ========================================================================= #
+# Version 1.0 - February 2021                                              	#
+# ========================================================================= #
+
+"""
+This module is part of ljpy. It defines the classes needed for simulations. 
+Three classes are defined.
+
+    site:       a class that holds the information for each site (atom) in the 
+                system such as x,y,z, position, x,y,z velocities, etc.
+    simualtion: a class that holds the information for the simulation as read
+                from the input file such as number of particles, temperature
+                density, etc.
+    props:      a class that holds the properties of the simulation such as 
+                potential energy, kinetic energy, pressure, etc.
+"""
+# The class for each site in the system
 class site:
     def __init__(self):
         self.x=0.0      # x position
@@ -15,7 +55,7 @@ class site:
         self.dz=0.0     # z displayement for diffusion (MD)   
         self.dr2=0.0    # MSD accumulator for diffusion (MD)
         
-# Create a class to hold the simulation information
+# The class to hold the simulation information
 class simulation:
     def __init__(self):
         self.method = None      # simulation method (md or mc)
@@ -39,13 +79,13 @@ class simulation:
         self.utail=0.0          # tail correction to energy
         self.ptail=0.0          # tail correction to pressure
         self.seed=-1            # seed to the random number generator
-        self.seedkeyvalue=-1    # key value for seed
+        self.seedkeyvalue=None  # key value for seed
         self.rdfmin=0.0         # minimum r value for rdf
         self.rdfmax=0.0         # maximum r value for rdf
         self.rdfN=0             # number of bins for rdf
         self.rdf=0              # frequency to accumulate the rdf
         
-# Create a class to hold the simulation properties
+# The class to hold the simulation properties
 class props:
     def __init__(self):
         self.ke=0.0             # kinetic energy
