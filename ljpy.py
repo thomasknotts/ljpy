@@ -37,9 +37,9 @@ It is run with the following command.
   python ljpy.py <inputfilename> <outputfilename>
 
 <inputfilename> is the name of the input file 
-And example could be MCN500T85R9.input which would do and NVT MC simulations
-of 500 particles at a dimensionless temperature of 0.85 and a dimensionless
-density of 0.9.
+An example could be MCN500T85R9.input which would identify that the input
+parameters are set to do an NVT MC simulations of 500 particles at a
+dimensionless temperature of 0.85 and a dimensionless density of 0.9.
 
 <outputfilename> is the desired name of the output file
 An example could be MCN500T85R9.output
@@ -51,13 +51,26 @@ also refer to the included documentation.
 
 # Import relevant libraries
 #import numpy as np
-import sys
+import sys, random, time
+from datetime import datetime
+import numpy as np
 
 #from ljpyclasses import simulation, site, props
 #from src.ljpyclasses import site
 from src.read_input import readinput
 from src.initialize_positions import initializepositions
 from src.initialize_files import initializefiles
+from src.initialize_velocities import initializevelocities
+
+# ========================================================================= #
+# Initialize the timer.                                                     #
+# Note: The timing uses the package date time to easily format the time     #
+# required to run the program.  However, this approach could give an        #
+# incorrect timing if the computer clock changes due to daylight savings or #
+# other events like a time change. This could be alleviated by using        #
+# time.monotonic() for start_time and end_time.                             #
+# ========================================================================= #
+start_time=datetime.now()
         
 # ========================================================================= #
 # Check the command line arguments for the input and output file names.     #
@@ -70,7 +83,21 @@ if len(sys.argv) != 3:
 # ========================================================================= #
 # Read the input file and store the simulation parameters to an object.     #
 # ========================================================================= #
-sim=readinput(sys.argv)       
+sim=readinput(sys.argv)
+
+# ========================================================================= #
+# Initialize the random number generator (rng).                             #
+# ========================================================================= #
+# Use the seed specified in the input file. Otherwise, get the seed from
+# the system clock.
+# Note: The current state of the rng is saved so that it can be passed
+# to functions that use random numbers. The purpose of passing the state
+# back and forth between functions that use random numbers is to always get
+# the same sequence of random numbers for a given seed value.
+if sim.seedkeyvalue == "generate":
+    sim.seed=-1*np.longlong(time.time()) # make a seed from the system clock
+random.seed(sim.seed) # initialize the rng
+randstate=random.getstate() # save the state of the rng
 
 # ========================================================================= #
 # Initialize or read in positions.                                          #
@@ -78,19 +105,36 @@ sim=readinput(sys.argv)
 atom=initializepositions(sim)
 
 # ========================================================================= #
+# Initialize or read in velocities for an md simulation.                    #
+# Note: randstate is updated by initializevelocities.                       #
+# ========================================================================= #
+if sim.method == "md": initializevelocities(sim, atom, randstate)
+
+# ========================================================================= #
 # Initialize the output files.                                              #
 # ========================================================================= #
-initializefiles(sim,atom)
-    
+initializefiles(sim, atom)
 
+# ========================================================================= #
+# Call the driver for the md or mc simulation.                              #
+# ========================================================================= #
+#if sim.method == "md": nvemd(sim,atom)
+#else: nvtmc(sim,atom,randstate)
 
 
 print("sim.N = ", sim.N)
+print("len(atom)", len(atom))
     
-
-    
-
-
+time.sleep(5)
+# ========================================================================= #
+# Calculate the wall time and finalize the simulation.                      #
+# ========================================================================= #
+end_time=datetime.now()    
+fp=open(sim.outputfile, "a")
+fp.write("Total Wall Time: {} (hh:mm:ss)\n".format((end_time - start_time) / \
+         1.0))
+fp.close()
+print("Start = ", start_time, "\tEnd = ",end_time)
     
 
 print(atom[17].x)                       

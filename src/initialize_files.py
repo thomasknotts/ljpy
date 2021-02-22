@@ -32,11 +32,6 @@ such as the simulations parameters, the initial positions, and the
 initial velocities 
 """
 
-# Import relevant libraries
-import sys, os
-import numpy as np
-from src.ljpyclasses import simulation, site
-
 def initializefiles(sim,atom):
     
     # Initialize the movie files.
@@ -49,20 +44,23 @@ def initializefiles(sim,atom):
         fi=open(sim.moviefile.split(".")[0]+".xyz","w")
         fi.write(str(sim.N)+"\nLoad this file in VMD before the .trr file\n")
         for i in range(sim.N):
-            fi.write("C\t{:13.6f}\t{:13.6f}\t{:13.6f}\n".format(atom[i].x,atom[i].y,atom[i].z))
+            fi.write("C\t{:13.6f}\t{:13.6f}\t{:13.6f}\n".format(atom[i].x, \
+                                                                atom[i].y, \
+                                                                atom[i].z))
         fi.close()
         
     # Write the header output file including the simulation parameters,
     # the initial, and the initial velocities.
     fi=open(sim.outputfile,"w")
-    fi.write(str(sim.method).upper() + " simulation of " + str(sim.N) + " LJ " +
-             "Particles at T*={:.4f}".format(sim.T) + " and " +
+    fi.write(str(sim.method).upper() + " simulation of " + str(sim.N) + 
+             " LJ Particles at T*={:.4f}".format(sim.T) + " and " +
              "rho*={:.4f}\n\n".format(sim.rho))
     fi.write("Input File:         " + sim.inputfile + "\n")
     fi.write("Output File:        " + sim.outputfile + "\n\n")
-#   fprintf(fp, "%s", input_errors);
+
     if sim.seedkeyvalue == "generate":
-        fi.write("The random number seed was generated from the system clock.\n")
+        fi.write("The random number seed was generated from the system " +
+                 "clock.\n")
     elif sim.seedkeyvalue == "specified":
         fi.write("The random number seed was specified in the input file.\n")
     else:
@@ -104,11 +102,16 @@ def initializefiles(sim,atom):
     fi.write(str(sim.N) + "\nYou can copy these coordinates to a file to " +
              "open in a viewer.\n")
     for i in range(sim.N):
-        fi.write("C\t{:13.6f}\t{:13.6f}\t{:13.6f}\n".format(atom[i].x,atom[i].y,atom[i].z))
+        fi.write("C\t{:13.6f}\t{:13.6f}\t{:13.6f}\n".format(atom[i].x, \
+                                                            atom[i].y, \
+                                                            atom[i].z))
 
     if sim.method == "md":
-#     fprintf(fp, "\n         ***INITIAL VELOCITIES***\n");
-#     for (i = 0; i < sim.N; i++) fprintf(fp, "\t%13.6lf\t%13.6lf\t%13.6lf\n", atom[i].vx, atom[i].vy, atom[i].vz);
+        fi.write("\n         ***INITIAL VELOCITIES***\n");
+        for i in range(sim.N):
+            fi.write("\t{:13.6f}\t{:13.6f}\t{:13.6f}\n".format(atom[i].vx, \
+                                                               atom[i].vy, \
+                                                               atom[i].vz))
         fi.write("\n\nIteration         \tTemp         \tP            \t" +
                  "KE           \tPE           \tTotal Energy\n\n")
     else: fi.write("\n\nIteration         \tP            \tPE\n\n")

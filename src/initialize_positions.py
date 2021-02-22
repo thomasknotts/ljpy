@@ -88,9 +88,64 @@ def initializepositions(sim):
                             atom[particle].z=0.0+zdir*a
                             case=0
                         particle=particle + 1
+    # If a file with coordinates is supplied, read the positions.
     else:
+        print("Reading coordinates from " + sim.icoord + "\n")
         # Check if the specified input file exists.
         if not os.path.isfile(sim.icoord): 
             print("Input file \"" + sim.icoord +"\" does not exist.\n")
             sys.exit("Error: Specified coordinate file missing.")
+        
+        # Open the file with the 
+        fp=open(sim.icoord)
+        
+        # Define a counter for the number of particles
+        particle = 0
+
+        # Loop around the lines in the file and assign the positions
+        while True:
+            line=fp.readline()
+            # break if there is a blank line or the end of file
+            if not line: break
+            atom.append(site())
+            xyz = line.split()
+            if len(xyz) != 3:
+                sys.exit("There is a problem with the coordinates for " +
+                         "atom " + str(particle+1) + " in \"" + sim.icoord + 
+                         "\"\n")
+            else:
+                try:
+                    atom[particle].x = np.float(xyz[0])
+                    atom[particle].y = np.float(xyz[1])
+                    atom[particle].z = np.float(xyz[2])
+                except ValueError:
+                    sys.exit("There is a problem with the coordinates for " +
+                             "atom " + str(particle+1) + " in \"" + 
+                             sim.icoord + "\"\n")
+                particle=particle+1
+        fp.close()    
+        # Check to see if the number of coordinates read in from 
+        # the coordinate file is the same as the number specified in 
+        # the input file.
+        if particle != sim.N:
+            sys.exit("The number of coordinates (" + str(particle) + ") " + 
+                     "in \"" + sim.icoord + "\" is not equal to the number " +
+                     "of atoms " + "(" + str(sim.N) + ") in \"" + 
+                     sim.inputfile + "\"\n")
+    
+    return(atom)
+                
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         

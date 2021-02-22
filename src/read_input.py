@@ -195,6 +195,8 @@ def readinput(args):
         if sim.seed >=0:
             sys.exit("The value of keyword \"seed\" in the input file " +
                      "must be a negative integer.\n")
+    else: 
+        sim.seed=-8293867282831
     
     # ------- movie keyword ------- #
     movieget=params.get('movie')
