@@ -4,7 +4,7 @@ Input File:         sim.input
 Output File:        sim.output
 
 The random number seed was generated from the system clock.
-Random Number Seed: -1614030083
+Random Number Seed: -1614037672
 
 
     ***Input Parameters***
@@ -1034,4 +1034,4 @@ C	     4.206985	     6.612539	     0.522764
 
 Iteration         	Temp         	P            	KE           	PE           	Total Energy
 
-Total Wall Time: 0:00:05.046026 (hh:mm:ss)
+Total Wall Time: 0:00:02.050517 (hh:mm:ss)

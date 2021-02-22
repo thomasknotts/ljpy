@@ -125,7 +125,7 @@ initializefiles(sim, atom)
 print("sim.N = ", sim.N)
 print("len(atom)", len(atom))
     
-time.sleep(5)
+time.sleep(2)
 # ========================================================================= #
 # Calculate the wall time and finalize the simulation.                      #
 # ========================================================================= #
