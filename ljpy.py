@@ -61,6 +61,7 @@ from src.read_input import readinput
 from src.initialize_positions import initializepositions
 from src.initialize_files import initializefiles
 from src.initialize_velocities import initializevelocities
+from src.nvemd import nvemd
 
 # ========================================================================= #
 # Initialize the timer.                                                     #
@@ -118,23 +119,18 @@ initializefiles(sim, atom)
 # ========================================================================= #
 # Call the driver for the md or mc simulation.                              #
 # ========================================================================= #
-#if sim.method == "md": nvemd(sim,atom)
+if sim.method == "md": nvemd(sim,atom)
 #else: nvtmc(sim,atom,randstate)
-
-
-print("sim.N = ", sim.N)
-print("len(atom)", len(atom))
-    
-time.sleep(2)
+  
 # ========================================================================= #
 # Calculate the wall time and finalize the simulation.                      #
 # ========================================================================= #
 end_time=datetime.now()    
 fp=open(sim.outputfile, "a")
-fp.write("Total Wall Time: {} (hh:mm:ss)\n".format((end_time - start_time) / \
-         1.0))
+fp.write("\nTotal Wall Time (h:mm:ss): {}\n".format((end_time - start_time)))
 fp.close()
-print("Start = ", start_time, "\tEnd = ",end_time)
+print("Total Wall Time: {} (hh:mm:ss)\n".format((end_time - start_time) / \
+         1.0))
     
 
-print(atom[17].x)                       
+                    

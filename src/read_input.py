@@ -1,4 +1,4 @@
-# read_input is part of ljpy for Lennard Jones simulations.                 #	 	                             #
+# read_input is part of ljpy for Lennard Jones simulations.                 #
 # Copyright (C) 2021 Thomas Allen Knotts IV - All Rights Reserved          	#
 #																		   	#
 # This program is free software: you can redistribute it and/or modify      #

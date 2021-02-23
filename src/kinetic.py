@@ -1,4 +1,4 @@
-# kinetic is part of ljpy for Lennard Jones simulations.                    #	 	                             #
+# kinetic is part of ljpy for Lennard Jones simulations.                    #
 # Copyright (C) 2021 Thomas Allen Knotts IV - All Rights Reserved          	#
 #																		   	#
 # This program is free software: you can redistribute it and/or modify      #
@@ -64,7 +64,7 @@ def ke_and_T(atom):
     # Determine the number of particles
     N=len(atom)
     # Calculate the kinetic energy of the system.
-    ke=kinetic_energy
+    ke=kinetic_energy(atom)
     # Calculate the temperature from the kinetic energy
     T=2.0/3.0/N*ke
     return(ke,T)

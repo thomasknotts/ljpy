@@ -1,4 +1,4 @@
-# initialize_files is part of ljpy for Lennard Jones simulations.           #	 	                             #
+# initialize_files is part of ljpy for Lennard Jones simulations.           #
 # Copyright (C) 2021 Thomas Allen Knotts IV - All Rights Reserved          	#
 #																		   	#
 # This program is free software: you can redistribute it and/or modify      #
@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.   	#
 
 # ========================================================================= #
-# initialize_files.py                                                  	#
+# initialize_files.py                                                    	#
 #                                                                          	#
 # Thomas A. Knotts IV                                                      	#
 # Brigham Young University                                                 	#
@@ -112,8 +112,9 @@ def initializefiles(sim,atom):
             fi.write("\t{:13.6f}\t{:13.6f}\t{:13.6f}\n".format(atom[i].vx, \
                                                                atom[i].vy, \
                                                                atom[i].vz))
-        fi.write("\n\nIteration         \tTemp         \tP            \t" +
-                 "KE           \tPE           \tTotal Energy\n\n")
+        fi.write("\n\nIteration                T              T Ave.       " +
+                 "       P              P Ave.            KE               " +
+                 "PE               TE\n\n")
     else: fi.write("\n\nIteration         \tP            \tPE\n\n")
 
     fi.close()
