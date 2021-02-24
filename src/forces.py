@@ -93,5 +93,5 @@ def forces(sim,atom):
                 # virial and potential energy
                 virial=virial+dr2*fr
                 pe=pe+4.0*(d14-d8)*dr2
-        
+
     return(pe, virial)

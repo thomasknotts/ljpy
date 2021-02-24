@@ -35,6 +35,7 @@ from src.forces import forces
 from src.kinetic import ke_and_T
 from src.verlet import verlet1, verlet2
 from src.ljpyclasses import props
+from src.scale_velocities import scalevelocities
 import numpy as np
 
 def nvemd(sim, atom):
@@ -93,5 +94,46 @@ def nvemd(sim, atom):
         # in the input file. This is only done during the equilibration
         # steps of MD simulations.
         if i%rescale_freq == 0: scalevelocities(sim, atom, aprop.T/i)
-    
+        
+    # Reset the accumulators for the production steps
+    aprop.pe=0.0
+    aprop.ke=0.0
+    aprop.T=0.0
+    aprop.virial=0.0
+    for i in range(sim.N):
+        atom[i].dx=0.0
+        atom[i].dy=0.0
+        atom[i].dz=0.0
+        
+    # Perform the production steps
+    # During production, accumulate all the properties.
+    for i in range(1,np.int(sim.eq+1)):
+        verlet1(sim, atom) # first half of velocity verlet algorithm
+        iprop.pe, iprop.virial = forces(sim, atom) # calculate the forces
+        verlet2(sim, atom) # second half of velocity verlet algorithm
+        iprop.ke, iprop.T = ke_and_T(atom) # kinetic and potential energy
+        
+        # Accumulate the properties
+        aprop.pe=aprop.pe + iprop.pe
+        aprop.ke=aprop.ke + iprop.ke
+        aprop.T=aprop.T + iprop.T
+        aprop.virial=aprop.virial + iprop.virial
+        aprop.pe2=aprop.pe2+iprop.pe*iprop.pe
+        
+        # Output instantaneous properties at the interval
+        # specified in the input file.
+        if i%sim.output == 0:
+            P=sim.rho*iprop.T + 1.0/3.0/sim.length**3.0*iprop.virial + \
+              sim.ptail
+            Pave=sim.rho*aprop.T/i + 1.0/3.0/sim.length**3.0*aprop.virial/i + \
+              sim.ptail 
+            fp=open(sim.outputfile, "a")
+            fp.write("{:<13}    {:13.6f}    {:13.6f}    {:13.6f}    {:13.6f}    " \
+                     "{:13.6f}    {:13.6f}    {:13.6f}\n" \
+                     .format(i, iprop.T, aprop.T/i, P, Pave, iprop.ke/sim.N, \
+                             iprop.pe/sim.N + sim.utail, \
+                             (iprop.ke + iprop.pe)/sim.N + sim.utail))
+            fp.close()
+            print("Production Step " + str(i) + "\n")
+        
     print("pe =",iprop.pe,", virial =",iprop.virial,", ke =",iprop.ke,", T =",iprop.T)
