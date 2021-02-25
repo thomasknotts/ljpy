@@ -83,7 +83,7 @@ def readinput(args):
     methodget=params.get('sim')
     if not methodget: sys.exit("The required keyword \"sim\" is missing in " +
                                "the input file.")
-    if methodget[0] =='md' or methodget == 'mc': sim.method=params['sim'][0]
+    if methodget[0] =='md' or methodget[0] == 'mc': sim.method=params['sim'][0]
     else: sys.exit("The value of keyword \"sim\" in the input file must be " +
                    "either \"md\" or \"mc\".\n")
     

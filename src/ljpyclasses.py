@@ -54,6 +54,7 @@ class site:
         self.dy=0.0     # y displacement for diffusion (MD)
         self.dz=0.0     # z displayement for diffusion (MD)   
         self.dr2=0.0    # MSD accumulator for diffusion (MD)
+        self.pe=0.0     # potential energy of site (MC)
         
 # The class to hold the simulation information
 class simulation:
@@ -94,5 +95,5 @@ class props:
         self.T=0.0              # temperature
         self.virial=0.0         # virial for pressure
         self.naccept=0          # number of mc moves accepted
-        self.ntrys=0            # number of mc moves tried
+        self.ntry=0             # number of mc moves tried
         self.Nhist=0            # number of times accumulated

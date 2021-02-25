@@ -115,8 +115,8 @@ def initializefiles(sim,atom):
         fi.write("\n\nIteration                T              T Ave.       " +
                  "       P              P Ave.            KE               " +
                  "PE               TE\n\n")
-    else: fi.write("\n\nIteration         \tP            \tPE\n\n")
-
+    else: fi.write("\n\nIteration                P              P Ave. " +
+                       "             PE\n\n") 
     fi.close()
     
     

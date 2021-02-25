@@ -1,4 +1,4 @@
-# forces is part of ljpy for Lennard Jones simulations.                     #
+# atomic_pe is part of ljpy for Lennard Jones simulations.                  #
 # Copyright (C) 2021 Thomas Allen Knotts IV - All Rights Reserved          	#
 #																		   	#
 # This program is free software: you can redistribute it and/or modify      #
@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.   	#
 
 # ========================================================================= #
-# forces.py                                                               	#
+# atomic_pe.py                                                    	        #
 #                                                                          	#
 # Thomas A. Knotts IV                                                      	#
 # Brigham Young University                                                 	#
@@ -27,43 +27,36 @@
 # ========================================================================= #
 
 """
-This module is part of ljpy. This function calculates the energies and forces
-between each Lennard Jones particle. It returns the potential energy
-and virial for the state of the list of particles passed.
+This module is part of ljpy. It has a function that calculates the 
+potential energy of each atom with each of its neighbors.  It is used in MC
+to calculate the difference in energies for use in the metropolis criterion.    
 """
-
 # Import relevant libraries
 import numpy as np
-#from numba import jit
 
-# This function is passed a simulation object and a list of site object.
-# It returns the potential energy of the system and also assigns the 
-# forces on each site. 
-#@jit(nopython=True)
-def forces(sim,atom):
+# This functions take a simulation object, a list of site objects, the
+# particle that is moved, and the coordinates of the particle that is moved.
+# It calculate the potential energy of this particle with all the other 
+# particles in the system. This subroutine is called twice for one monte carlo
+# move. It returns the potential energy of the particle for the state
+# in atom.
+
+def atomic_pe(sim, atom, particle):
     # Variables
-    hL=np.float(sim.length*0.5)   # half the box length
-    N=np.int(sim.N)
+    hL=sim.length/2.0
     
-    # Zero out the force accumulators for each particle
+    # Zero out the potential energy accumulator
+    u=0.0
+    
+    # Loop around the neighbors of the selected particle to get the
+    # energy.
     for i in range(sim.N):
-        atom[i].fx=0.0
-        atom[i].fy=0.0
-        atom[i].fz=0.0
-    
-    # Zero out the system accumulators
-    virial=0.0  # virial portion of pressure
-    pe=0.0      # potential energy
-       
-    # Calculate the forces by looping over all pairs of sites
-    for i in range(N-1):
-        for j in range(i+1, N):
-            # Calculate the distance between sites i and j
-            dx=atom[i].x-atom[j].x
-            dy=atom[i].y-atom[j].y
-            dz=atom[i].z-atom[j].z
+        if particle != i: # exclude particle i from itself
+            dx=atom[i].x-atom[particle].x
+            dy=atom[i].y-atom[particle].y
+            dz=atom[i].z-atom[particle].z
             
-            # Minimum image convention
+            # Apply minimum image convection
             if np.abs(dx)>hL:
                 if dx < 0.0: dx=dx+sim.length
                 else: dx=dx-sim.length
@@ -74,26 +67,13 @@ def forces(sim,atom):
                 if dz < 0.0: dz=dz+sim.length
                 else: dz=dz-sim.length
             
-            dr2=dx*dx+dy*dy+dz*dz
-            
-            # Calculate the energy and force for the pair
-            if dr2 < sim.rc2: # apply cutoff
-                d2=1.0/dr2
-                d4=d2*d2
-                d8=d4*d4
-                d14=d8*d4*d2
-                fr=48.0*(d14-0.5*d8)
+            # Distance and energy calculation        
+            dr=dx*dx+dy*dy+dz*dz
+            if dr<sim.rc2:
+                dr2=1.0/dr
+                dr4=dr2*dr2
+                dr6=dr4*dr2
+                dr12=dr6*dr6
+                u+=4.0*(dr12-dr6)
                 
-                # components of forces
-                atom[i].fx=atom[i].fx+fr*dx
-                atom[i].fy=atom[i].fy+fr*dy
-                atom[i].fz=atom[i].fz+fr*dz
-                atom[j].fx=atom[j].fx-fr*dx
-                atom[j].fy=atom[j].fy-fr*dy
-                atom[j].fz=atom[j].fz-fr*dz   
-                
-                # virial and potential energy
-                virial=virial+dr2*fr
-                pe=pe+4.0*(d14-d8)*dr2
-
-    return(np.float(pe), np.float(virial))
+    return(u)

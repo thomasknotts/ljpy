@@ -102,8 +102,9 @@ def finalizefile(sim, atom, aprop, rdfh, rdfcalls):
             fp.write("Total Energy:      {:10.6f}\n".format((ke+pe)/N+sim.utail))
             fp.write("Diffusivity        {:10.6f}\n".format(Dmsd))
         if sim.method == "mc":
-            fp.write("MC Moves Accepted: {:10.6f}\n".format(aprop.naccept / \
-                                                            aprop.ntrys))
+            if aprop.ntry != 0:
+                fp.write("MC Moves Accepted: {:10.6f}\n" \
+                         .format(aprop.naccept/aprop.ntry))
     else:
         fp.write("\nNo productions steps were specified, so simulation " +
                  "averages were not calculated.\n\n")

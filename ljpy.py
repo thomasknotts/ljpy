@@ -62,6 +62,7 @@ from src.initialize_positions import initializepositions
 from src.initialize_files import initializefiles
 from src.initialize_velocities import initializevelocities
 from src.nvemd import nvemd
+from src.nvtmc import nvtmc
 
 # ========================================================================= #
 # Initialize the timer.                                                     #
@@ -120,7 +121,7 @@ initializefiles(sim, atom)
 # Call the driver for the md or mc simulation.                              #
 # ========================================================================= #
 if sim.method == "md": nvemd(sim,atom)
-#else: nvtmc(sim,atom,randstate)
+else: nvtmc(sim,atom,randstate)
   
 # ========================================================================= #
 # Calculate the wall time and finalize the simulation.                      #
