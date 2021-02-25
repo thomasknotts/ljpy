@@ -56,10 +56,8 @@ class hist(object):
         return
     
     def accumulate(self, x, weight):
-        print("x=",x)
         if x>=self.xmin and x<self.xmax:
             index=int((x-self.xmin)/self.bin_width)
-            print("index =",index)
             self.bin[index]+=weight 
         return
         
