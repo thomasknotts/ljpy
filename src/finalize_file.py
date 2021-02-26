@@ -93,18 +93,21 @@ def finalizefile(sim, atom, aprop, rdfh, rdfcalls):
 
     if sim.pr > 0:
         fp.write("\n***Simulation Averages***\n\n")
-        fp.write("Temperature:       {:10.6f}\n".format(T))
-        fp.write("Pressure:          {:10.6f}\n".format(P))
-        fp.write("Heat Capacity:     {:10.6f}\n".format(cv))
-        fp.write("Potential Energy:  {:10.6f}\n".format(pe/N + sim.utail))
+        fp.write("Temperature:            {:10.6f}\n".format(T))
+        fp.write("Pressure:               {:10.6f}\n".format(P))
+        fp.write("Heat Capacity:          {:10.6f}\n".format(cv))
+        fp.write("Potential Energy:       {:10.6f}\n".format(pe/N + sim.utail))
         if sim.method == "md":
-            fp.write("Kinetic Energy:    {:10.6f}\n".format(ke/N))
-            fp.write("Total Energy:      {:10.6f}\n".format((ke+pe)/N+sim.utail))
-            fp.write("Diffusivity        {:10.6f}\n".format(Dmsd))
+            fp.write("Kinetic Energy:         {:10.6f}\n".format(ke/N))
+            fp.write("Total Energy:           {:10.6f}\n".format((ke+pe) \
+                                                                 /N+sim.utail))
+            fp.write("Diffusivity             {:10.6f}\n".format(Dmsd))
         if sim.method == "mc":
             if aprop.ntry != 0:
-                fp.write("MC Moves Accepted: {:10.6f}\n" \
+                fp.write("MC Moves Accepted:      {:10.6f}\n" \
                          .format(aprop.naccept/aprop.ntry))
+                fp.write("Final Max Displacment:  {:10.6f}\n" \
+                         .format(sim.dt))
     else:
         fp.write("\nNo productions steps were specified, so simulation " +
                  "averages were not calculated.\n\n")

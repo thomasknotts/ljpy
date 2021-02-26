@@ -44,14 +44,12 @@ from src.forces import forces
 # current state of the random number generator, and a property object.
 # It returns True if the move is accepted. It returns False if the move is
 # rejected.
-def move(sim, atom, randstate, iprop):
+def move(sim, atom, iprop):
     # Set the state of the random number generator
-    #random.setstate(randstate)
     
     # Select a random particle
     iprop.ntry+=1
     particle=random.randint(0, sim.N-1)
-    #print("particle =",particle)
     
     # Save the current (old) position of the system in case
     # the move is not accepted 
@@ -90,16 +88,8 @@ def move(sim, atom, randstate, iprop):
     # proposed and old state of the system
     de=penew-atom[particle].pe
     
-    # Generate a random number and save the current state
-    # of the random number generator.
-    rand=random.uniform(0,1)     # random float between [0,1]
-    #randstate=random.getstate()  # update the state of the rng
-    
     # Accept/Reject the move
-    #print("ede {:.3f}\n".format(np.exp(-de/sim.T)))
-    #print("rand {:.3f}\n".format(rand))
-    if rand < np.exp(-de/sim.T): # accept
-        #print("accepted {:.3f}\n".format(np.exp(-de/sim.T)))
+    if random.uniform(0,1) < np.exp(-de/sim.T): # accept
         iprop.naccept+=1
         iprop.pe, iprop.virial=forces(sim, atom)
         iprop.pe2=iprop.pe*iprop.pe

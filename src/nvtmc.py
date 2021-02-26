@@ -41,7 +41,9 @@ from src.finalize_file import finalizefile
 import src.dhist as dh
 import numpy as np
 
-def nvtmc(sim, atom, randomstate):
+def nvtmc(sim, atom):
+    # Variables
+    freq_scale_delta=1 # frequency to scale the maximum displacement
     
     # Create objects for the instanteous and average properties
     iprop=props()
@@ -68,7 +70,7 @@ def nvtmc(sim, atom, randomstate):
     for i in range(1, np.int(sim.eq+1)):
         for j in range(sim.N): # This loop performs sim.N moves per step
             # Propose and accept or reject a move
-            move(sim,atom,randomstate,iprop)
+            move(sim,atom,iprop)
             
             # Accumulate the properties for the move
             aprop.pe+=iprop.pe
@@ -88,7 +90,7 @@ def nvtmc(sim, atom, randomstate):
             print("Equilibration Step " + str(i) + "\n")
         
         # Scale delta to obtain desired acceptance of moves
-        if i%100 == 0: scale_delta(sim,iprop,aprop)
+        if i%freq_scale_delta == 0: scale_delta(sim,iprop,aprop)
         
     # Reset accumulators for production steps
     iprop.ntry=0
@@ -109,7 +111,7 @@ def nvtmc(sim, atom, randomstate):
     for i in range(1, np.int(sim.pr+1)):
         for j in range(sim.N): # This loop performs sim.N moves per step
             # Propose and accept or reject a move
-            move(sim,atom,randomstate,iprop)
+            move(sim,atom,iprop)
             
             # Accumulate the properties for the move
             aprop.pe+=iprop.pe
@@ -135,7 +137,7 @@ def nvtmc(sim, atom, randomstate):
             print("Equilibration Step " + str(i) + "\n")
         
         # Scale delta to obtain desired acceptance of moves
-        if i%100 == 0: scale_delta(sim,iprop,aprop)
+        if i%freq_scale_delta == 0: scale_delta(sim,iprop,aprop)
         
     # Finalize the output file after all equilibration and production    
     # steps are finished.  This calculates and write the averages to the 

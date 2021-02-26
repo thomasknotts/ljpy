@@ -45,12 +45,10 @@ from src.scale_velocities import scalevelocities
 # This function is passed a simulation object, a list of site objects, and
 # the current state of the random number generator from the main program
 # It sets the velocities of each particle in the site object.
-def initializevelocities(sim,atom,randstate):
+def initializevelocities(sim,atom):
     # If the input file specificies "generate" or the vel keywork is
     # omitted, then randomly generate the velocities
     if sim.ivel == "generate" or sim.ivel == None:
-        # Set the current state of the rng
-        random.setstate(randstate)
         # Loop around the sites and assign random velocities from -1.0 to 1.0  
         for i in range(sim.N):
             atom[i].vx=random.uniform(-1, 1)
@@ -112,4 +110,3 @@ def initializevelocities(sim,atom,randstate):
                      "in \"" + sim.ivel + "\" is not equal to the number " +
                      "of atoms " + "(" + str(sim.N) + ") in \"" + 
                      sim.inputfile + "\"\n")
-    randstate=random.getstate() # update the current state of the rng
