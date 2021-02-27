@@ -124,7 +124,7 @@ def nvtmc(sim, atom):
                 Nrdfcalls+=1
                 rdf_accumulate(sim, atom, rdfh)
        
-        # Output equilibration progress at the interval specified
+        # Output production progress at the interval specified
         # in the input file
         if i%sim.output == 0:
             P=sim.rho*sim.T + 1.0/3.0/sim.length**3.0*iprop.virial + sim.ptail
@@ -134,7 +134,7 @@ def nvtmc(sim, atom):
             fp.write("{:<13}    {:13.6f}    {:13.6f}    {:13.6f}\n" \
                      .format(i, P, Pave, iprop.pe/sim.N + sim.utail))
             fp.close()
-            print("Equilibration Step " + str(i) + "\n")
+            print("Production Step " + str(i) + "\n")
         
         # Scale delta to obtain desired acceptance of moves
         if i%freq_scale_delta == 0: scale_delta(sim,iprop,aprop)
