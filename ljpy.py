@@ -54,7 +54,6 @@ also refer to the included documentation.
 import sys, random, time
 from datetime import datetime
 import numpy as np
-
 #from ljpyclasses import simulation, site, props
 #from src.ljpyclasses import site
 from src.read_input import readinput
@@ -109,18 +108,18 @@ atom=initializepositions(sim)
 # Initialize or read in velocities for an md simulation.                    #
 # Note: randstate is updated by initializevelocities.                       #
 # ========================================================================= #
-if sim.method == "md": initializevelocities(sim, atom)
+#if sim.method == "md": initializevelocities(sim, atom)
 
 # ========================================================================= #
 # Initialize the output files.                                              #
 # ========================================================================= #
-initializefiles(sim, atom)
+#initializefiles(sim, atom)
 
 # ========================================================================= #
 # Call the driver for the md or mc simulation.                              #
 # ========================================================================= #
-if sim.method == "md": nvemd(sim,atom)
-else: nvtmc(sim,atom)
+#if sim.method == "md": nvemd(sim,atom)
+#else: nvtmc(sim,atom)
   
 # ========================================================================= #
 # Calculate the wall time and finalize the simulation.                      #

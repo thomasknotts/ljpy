@@ -36,15 +36,21 @@ lattice.
 # Import relevant libraries
 import sys, os
 import numpy as np
-from src.ljpyclasses import site
 
 # This function is passed a simulation object from the main program
 # It returns a list of objects of type sites which is all the atoms (sites)
 # in the system.
 def initializepositions(sim):
-    # initialize the atom list
-    atom=[]
-    
+    # initialize the numpy arrays the atoms
+    atomx=np.zeros(sim.N)         # x position
+    atomy=np.zeros(sim.N)         # y position
+    atomz=np.zeros(sim.N)         # z position
+    atomfx=np.zeros(sim.N)        # x force
+    atomfy=np.zeros(sim.N)        # y force
+    atomfz=np.zeros(sim.N)        # z force
+    if (sim.method=='mc'):
+        atompe=np.zeros(sim.N)    # potential energy of site (MC)
+     
     # If the input file specificies "generate", then place the 
     # specified number of particles on a lattice.
     if sim.icoord == "generate" or sim.icoord == None:
@@ -65,27 +71,26 @@ def initializepositions(sim):
             for ydir in range(nlin):
                 for xdir in range(nlin):
                     for i in range(4):
-                        if particle == sim.N: return(atom)
-                        atom.append(site())
+                        if particle == sim.N: return(0)
                         if case == 0:
-                            atom[particle].x=0.0+xdir*a
-                            atom[particle].y=0.0+ydir*a
-                            atom[particle].z=0.0+zdir*a
+                            atomx[particle]=0.0+xdir*a
+                            atomy[particle]=0.0+ydir*a
+                            atomz[particle]=0.0+zdir*a
                             case=1
                         elif case == 1:
-                            atom[particle].x=0.0+xdir*a
-                            atom[particle].y=0.5*a+ydir*a
-                            atom[particle].z=0.5*a+zdir*a
+                            atomx[particle]=0.0+xdir*a
+                            atomy[particle]=0.5*a+ydir*a
+                            atomz[particle]=0.5*a+zdir*a
                             case=2
                         elif case == 2:
-                            atom[particle].x=0.5*a+xdir*a
-                            atom[particle].y=0.0+ydir*a
-                            atom[particle].z=0.5*a+zdir*a
+                            atomx[particle]=0.5*a+xdir*a
+                            atomy[particle]=0.0+ydir*a
+                            atomz[particle]=0.5*a+zdir*a
                             case=3
                         else:
-                            atom[particle].x=0.5*a+xdir*a
-                            atom[particle].y=0.5*a+ydir*a
-                            atom[particle].z=0.0+zdir*a
+                            atomx[particle]=0.5*a+xdir*a
+                            atomy[particle]=0.5*a+ydir*a
+                            atomz[particle]=0.0+zdir*a
                             case=0
                         particle=particle + 1
     # If a file with coordinates is supplied, read the positions.
@@ -107,7 +112,7 @@ def initializepositions(sim):
             line=fp.readline()
             # break if there is a blank line or the end of file
             if not line: break
-            atom.append(site())
+            
             xyz = line.split()
             if len(xyz) != 3:
                 sys.exit("There is a problem with the coordinates for " +
@@ -115,9 +120,9 @@ def initializepositions(sim):
                          "\"\n")
             else:
                 try:
-                    atom[particle].x = np.float(xyz[0])
-                    atom[particle].y = np.float(xyz[1])
-                    atom[particle].z = np.float(xyz[2])
+                    atomx[particle] = np.float(xyz[0])
+                    atomy[particle] = np.float(xyz[1])
+                    atomz[particle] = np.float(xyz[2])
                 except ValueError:
                     sys.exit("There is a problem with the coordinates for " +
                              "atom " + str(particle+1) + " in \"" + 
@@ -133,7 +138,7 @@ def initializepositions(sim):
                      "of atoms " + "(" + str(sim.N) + ") in \"" + 
                      sim.inputfile + "\"\n")
     
-    return(atom)
+    return(0)
                 
         
         
