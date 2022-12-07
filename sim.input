@@ -3,13 +3,13 @@ N         100                           # number of particles; required
 temp      0.85                          # temperature (dimensionless); required
 rho       0.9                           # density (dimensionless); required
 esteps    10                      # equilibrium steps; required 
-psteps    100                        # production steps; required
+psteps    10                        # production steps; required
 rcut      3.0                           # Lennard-Jones cut off (dimensionless length); required
 dt        0.01                         # time step for md (dimensionless time) or max delta for mc (dimensionless length); required
 coord     generate    # initial coordinates ["generate" or file name]
 acoord     N500T85R9-equilibrated.cor    # initial coordinates ["generate" or file name]
 avel       N500T85R9-equilibrated.vel    # initial velocities ["generate" or file name]
 output    1                          # frequency for output of instantaneous props; optional
-seed      -5                     # seed value for random number generator; optional ["generate" or negative number]
+seed      generate                     # seed value for random number generator; optional ["generate" or negative number]
 rdf      0.8 4.0 100 1                # calculate rdf; optional [rmin, rmax, number of bins, frequency for accumulation]
 movie     lj.trr 4000                   # create a move file; optional [file name, output frequency]

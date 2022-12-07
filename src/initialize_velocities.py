@@ -24,7 +24,7 @@
 # Email: thomas.knotts@byu.edu                                             	#
 # ========================================================================= #
 # Version 1.0 - February 2021                                              	#
-# Version 2.0 - December 2022                                              	#
+# Version 2.0 - December 2022 Changed from atom class to arrays for numba. 	#
 # ========================================================================= #
 
 """
@@ -46,17 +46,7 @@ from src.scale_velocities import scalevelocities
 # This function is passed a simulation object
 # the current state of the random number generator from the main program
 # It sets the velocities of each particle in the site object.
-def initializevelocities(sim):
-    # initialize the arrays holding the velocities and
-    # diffusion variables
-    atomvx=np.zeros(sim.N)    # x velocity
-    atomvy=np.zeros(sim.N)    # y velocity
-    atomvz=np.zeros(sim.N)    # z velocity
-    atomdx=np.zeros(sim.N)    # x displacement for diffusion
-    atomdy=np.zeros(sim.N)    # y displacement for diffusion
-    atomdz=np.zeros(sim.N)    # z displacement for diffusion
-    atomdr2=np.zeros(sim.N)   # MSD accumulator for diffusion
-
+def initializevelocities(sim, atomvx, atomvy, atomvz):
     # If the input file specificies "generate" or the vel keywork is
     # omitted, then randomly generate the velocities
 
@@ -68,16 +58,16 @@ def initializevelocities(sim):
             atomvz[i]=random.uniform(-1, 1)
             
         # Zero out the linear momentum
-        momentum_flag=zeromomentum()
+        momentum_flag=zeromomentum(atomvx, atomvy, atomvz)
         if momentum_flag:
             sys.exit("The linear momentum could not be zeroed out when " +
                      "the velocities were initialized.")
         #print("v17=" + str(atom[17].vx))
         # Determine the temperature of the randomly-assigned velocities
-        T=temperature()
+        T=temperature(atomvx, atomvy, atomvz)
         
         # Scale the temperatures to the system temperature
-        scalevelocities(sim,T)
+        scalevelocities(sim, atomvx, atomvy, atomvz, T)
         
     # If a file with velocities is supplied, read the velocities.
     else:
