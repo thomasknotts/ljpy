@@ -46,10 +46,12 @@ from src.forces import forces
 # rejected.
 def move(sim, atomx, atomy, atomz, atompe, iprop):
     # Set the state of the random number generator
+    #random.setstate(randstate)
     
     # Select a random particle
     iprop.ntry+=1
     particle=random.randint(0, sim.N-1)
+    #print("particle =",particle)
     
     # Save the current (old) position of the system in case
     # the move is not accepted 
@@ -88,7 +90,10 @@ def move(sim, atomx, atomy, atomz, atompe, iprop):
     # proposed and old state of the system
     de=penew-atompe[particle]
     # Accept/Reject the move
-    if random.uniform(0,1) < np.exp(-de/sim.T): # accept
+    #print("ede {:.3f}\n".format(np.exp(-de/sim.T)))
+    #print("rand {:.3f}\n".format(rand))
+    if rand < np.exp(-de/sim.T): # accept
+        #print("accepted {:.3f}\n".format(np.exp(-de/sim.T)))
         iprop.naccept+=1
         iprop.pe, iprop.virial, atomfx, atomfy, atomfz = forces(sim, atomx, atomy, atomz) # calculate the forces
         iprop.pe2=iprop.pe*iprop.pe

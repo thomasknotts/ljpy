@@ -51,6 +51,8 @@ def initializevelocities(sim, atomvx, atomvy, atomvz):
     # omitted, then randomly generate the velocities
 
     if sim.ivel == "generate" or sim.ivel == None:
+        # Set the current state of the rng
+        random.setstate(randstate)
         # Loop around the sites and assign random velocities from -1.0 to 1.0  
         for i in range(sim.N):
             atomvx[i]=random.uniform(-1, 1)
@@ -112,3 +114,4 @@ def initializevelocities(sim, atomvx, atomvy, atomvz):
                      "in \"" + sim.ivel + "\" is not equal to the number " +
                      "of atoms " + "(" + str(sim.N) + ") in \"" + 
                      sim.inputfile + "\"\n")
+
