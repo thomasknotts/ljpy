@@ -254,7 +254,7 @@ def readinput(args):
             
     sim.inputfile=args[1]
     sim.outputfile=args[2]
-    sim.length = np.double(sim.N/sim.rho)**(1.0/3.0)
+    sim.length = np.float64(sim.N/sim.rho)**(1.0/3.0)
     sim.utail = 8.0 / 3.0*np.pi*sim.rho*(1.0 / 3.0 * sim.rc**(-9.0) -
                                          sim.rc**(-3.0))
     sim.ptail = 16.0 / 3.0*np.pi*sim.rho*sim.rho*(2.0 / 3.0 * sim.rc**(-9.0) -

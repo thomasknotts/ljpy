@@ -24,6 +24,7 @@
 # Email: thomas.knotts@byu.edu                                             	#
 # ========================================================================= #
 # Version 1.0 - February 2021                                              	#
+# Version 2.0 - December 2022 Changed from atom class to arrays for numba. 	#
 # ========================================================================= #
 
 """
@@ -32,7 +33,7 @@ such as the simulations parameters, the initial positions, and the
 initial velocities 
 """
 
-def initializefiles(sim,atom):
+def initializefiles(sim, atomx, atomy, atomz, atomvx, atomvy, atomvz):
     
     # Initialize the movie files.
     if sim.movie:
@@ -44,9 +45,9 @@ def initializefiles(sim,atom):
         fi=open(sim.moviefile.split(".")[0]+".xyz","w")
         fi.write(str(sim.N)+"\nLoad this file in VMD before the .trr file\n")
         for i in range(sim.N):
-            fi.write("C\t{:13.6f}\t{:13.6f}\t{:13.6f}\n".format(atom[i].x, \
-                                                                atom[i].y, \
-                                                                atom[i].z))
+            fi.write("C\t{:13.6f}\t{:13.6f}\t{:13.6f}\n".format(atomx[i], \
+                                                                atomy[i], \
+                                                                atomz[i]))
         fi.close()
         
     # Write the header output file including the simulation parameters,
@@ -102,16 +103,16 @@ def initializefiles(sim,atom):
     fi.write(str(sim.N) + "\nYou can copy these coordinates to a file to " +
              "open in a viewer.\n")
     for i in range(sim.N):
-        fi.write("C\t{:13.6f}\t{:13.6f}\t{:13.6f}\n".format(atom[i].x, \
-                                                            atom[i].y, \
-                                                            atom[i].z))
+        fi.write("C\t{:13.6f}\t{:13.6f}\t{:13.6f}\n".format(atomx[i], \
+                                                            atomy[i], \
+                                                            atomz[i]))
 
     if sim.method == "md":
         fi.write("\n         ***INITIAL VELOCITIES***\n");
         for i in range(sim.N):
-            fi.write("\t{:13.6f}\t{:13.6f}\t{:13.6f}\n".format(atom[i].vx, \
-                                                               atom[i].vy, \
-                                                               atom[i].vz))
+            fi.write("\t{:13.6f}\t{:13.6f}\t{:13.6f}\n".format(atomvx[i], \
+                                                               atomvy[i], \
+                                                               atomvz[i]))
         fi.write("\n\nIteration                T              T Ave.       " +
                  "       P              P Ave.            KE               " +
                  "PE               TE\n\n")
