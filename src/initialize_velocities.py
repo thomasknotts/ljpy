@@ -42,13 +42,13 @@ from src.kinetic import temperature
 from src.scale_velocities import scalevelocities
 
 
-# This function is passed a simulation object, a list of site objects, and
-# the current state of the random number generator from the main program
-# It sets the velocities of each particle in the site object.
+# This function is passed a simulation object and a list of site objects
+# from the main program. It sets the velocities of each particle in the
+# site object.
 def initializevelocities(sim,atom):
     # If the input file specificies "generate" or the vel keywork is
     # omitted, then randomly generate the velocities
-    if sim.ivel == "generate" or sim.ivel == None:
+    if sim.ivel == "generate" or sim.ivel == "":
         # Loop around the sites and assign random velocities from -1.0 to 1.0  
         for i in range(sim.N):
             atom[i].vx=random.uniform(-1, 1)
@@ -60,7 +60,6 @@ def initializevelocities(sim,atom):
         if momentum_flag:
             sys.exit("The linear momentum could not be zeroed out when " +
                      "the velocities were initialized.")
-        print("v17=" + str(atom[17].vx))
         # Determine the temperature of the randomly-assigned velocities
         T=temperature(atom)
         

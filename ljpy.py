@@ -115,6 +115,7 @@ if sim.method == "md": initializevelocities(sim, atom)
 # Initialize the output files.                                              #
 # ========================================================================= #
 initializefiles(sim, atom)
+print("Initialization Complete\n")
 
 # ========================================================================= #
 # Call the driver for the md or mc simulation.                              #

@@ -154,4 +154,4 @@ def nvemd(sim, atom):
     finalizefile(sim, atom, aprop, rdfh, Nrdfcalls)
 
         
-    print("pe =",iprop.pe,", virial =",iprop.virial,", ke =",iprop.ke,", T =",iprop.T)
+    #print("pe = %.2f virial = %.3f ke = %.2f T = %.4f" % (iprop.pe,iprop.virial,iprop.ke,iprop.T))

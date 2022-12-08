@@ -32,7 +32,9 @@ radial distrubtion function from the simulation.
 """
 # import relevant libraries
 import numpy as np
+from numba import njit
 
+#@njit
 def rdf_accumulate(sim, atom, h):
     # Variables
     hL=sim.length*0.5   # half the box length

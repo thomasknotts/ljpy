@@ -51,7 +51,7 @@ def initializepositions(sim):
     
     # If the input file specificies "generate", then place the 
     # specified number of particles on a lattice.
-    if sim.icoord == "generate" or sim.icoord == None:
+    if sim.icoord == "generate" or sim.icoord == "":
         # zero out the counters
         particle = 0
         case = 0

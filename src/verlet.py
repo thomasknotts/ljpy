@@ -30,11 +30,13 @@
 This module is part of ljpy. It contains two functions to integrate the 
 equations of motion using the velocity verlet algorithm.
 """
-
+# Import relevant libraries
+from numba import njit
 # This function is passed a simulation object and a list of site objects.
 # It is the first needed to use the velocity verlet algorithm. It uses
 # the data at time step t to update the positions to the next time step and
 # the velocities to the next half time step.
+@njit
 def verlet1(sim, atom):
     
     for i in range(sim.N):
@@ -68,6 +70,7 @@ def verlet1(sim, atom):
 # It is the second function needed to use the velocity verlet       
 # algorithm.  It updates the velocites from the half time step to the 
 # full time step.
+@njit
 def verlet2(sim, atom):
     for i in range(sim.N):
         atom[i].vx=atom[i].vx+sim.dt*atom[i].fx/2.0
