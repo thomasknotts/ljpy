@@ -2,8 +2,8 @@ sim       mc                            # simulation type; required [md or mc]
 N         100                           # number of particles; required
 temp      0.85                          # temperature (dimensionless); required
 rho       0.9                           # density (dimensionless); required
-esteps    10                      # equilibrium steps; required 
-psteps    10                        # production steps; required
+esteps    5                      # equilibrium steps; required 
+psteps    5                        # production steps; required
 rcut      3.0                           # Lennard-Jones cut off (dimensionless length); required
 dt        0.01                         # time step for md (dimensionless time) or max delta for mc (dimensionless length); required
 coord     generate    # initial coordinates ["generate" or file name]

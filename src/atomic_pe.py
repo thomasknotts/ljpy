@@ -33,14 +33,14 @@ to calculate the difference in energies for use in the metropolis criterion.
 """
 # Import relevant libraries
 import numpy as np
-
+from numba import njit
 # This functions take a simulation object, a list of site objects, the
 # particle that is moved, and the coordinates of the particle that is moved.
 # It calculate the potential energy of this particle with all the other 
 # particles in the system. This subroutine is called twice for one monte carlo
 # move. It returns the potential energy of the particle for the state
 # in atom.
-
+@njit
 def atomic_pe(sim, atom, particle):
     # Variables
     hL=sim.length/2.0

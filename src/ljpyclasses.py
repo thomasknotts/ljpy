@@ -38,7 +38,28 @@ Three classes are defined.
     props:      a class that holds the properties of the simulation such as 
                 potential energy, kinetic energy, pressure, etc.
 """
+# The code below is the use numba to speed up the calculation
+# of the loops.
+import numba as nb
+site_spec = [('x',nb.float64),  ('y',nb.float64), ('z',nb.float64),   \
+             ('vx',nb.float64), ('vy',nb.float64), ('vz',nb.float64), \
+             ('fx',nb.float64), ('fy',nb.float64), ('fz',nb.float64), \
+             ('dx',nb.float64), ('dy',nb.float64), ('dz',nb.float64), \
+             ('dr2',nb.float64), ('pe',nb.float64)]
+sim_spec = [('method',nb.types.unicode_type), ('T',nb.float64),  \
+            ('rho', nb.float64), ('N',nb.int64), ('eq',nb.int64), \
+            ('pr',nb.int64), ('itrr',nb.int64), ('rc',nb.float64), \
+            ('rc2',nb.float64), ('dt',nb.float64), \
+            ('icoord',nb.types.unicode_type), ('ivel',nb.types.unicode_type), \
+            ('inputfile',nb.types.unicode_type), ('outputfile',nb.types.unicode_type), \
+            ('length',nb.float64), ('output',nb.int64), ('movie',nb.int64), \
+            ('moviefile',nb.types.unicode_type), ('utail',nb.float64), \
+            ('ptail',nb.float64), ('seed',nb.int64), \
+            ('seedkeyvalue',nb.types.unicode_type), ('rdfmin',nb.float64), 
+            ('rdfmax',nb.float64), ('rdfN',nb.int64), ('rdf',nb.int64)]
+            
 # The class for each site in the system
+@nb.experimental.jitclass(site_spec)
 class site:
     def __init__(self):
         self.x=0.0      # x position
@@ -56,10 +77,13 @@ class site:
         self.dr2=0.0    # MSD accumulator for diffusion (MD)
         self.pe=0.0     # potential energy of site (MC)
         
+
+
 # The class to hold the simulation information
+@nb.experimental.jitclass(sim_spec)
 class simulation:
     def __init__(self):
-        self.method = None      # simulation method (md or mc)
+        self.method = ''      # simulation method (md or mc)
         self.T = 0.0            # temperature [T*]
         self.rho = 0.0          # density [rho*]
         self.N=0                # number of particles
@@ -69,18 +93,18 @@ class simulation:
         self.rc=0.0             # cutoff radius [r*]
         self.rc2=0.0            # square of cutoff radius [r*]
         self.dt=0.0             # time step for md or max delta for mc
-        self.icoord=None        # filename for initial coordinates
-        self.ivel=None          # filename for initial velocities
-        self.inputfile=None     # name of input file
-        self.outputfile=None    # name of output file
+        self.icoord=''        # filename for initial coordinates
+        self.ivel=''          # filename for initial velocities
+        self.inputfile=''     # name of input file
+        self.outputfile=''    # name of output file
         self.length=0.0         # length of simulation blox
         self.output=0           # interval for ouput of instan. props.
         self.movie=0            # interval for movie frames
-        self.moviefile=None     # name of movie file
+        self.moviefile=''     # name of movie file
         self.utail=0.0          # tail correction to energy
         self.ptail=0.0          # tail correction to pressure
         self.seed=-1            # seed to the random number generator
-        self.seedkeyvalue=None  # key value for seed
+        self.seedkeyvalue=''  # key value for seed
         self.rdfmin=0.0         # minimum r value for rdf
         self.rdfmax=0.0         # maximum r value for rdf
         self.rdfN=0             # number of bins for rdf

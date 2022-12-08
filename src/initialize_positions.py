@@ -37,13 +37,17 @@ lattice.
 import sys, os
 import numpy as np
 from src.ljpyclasses import site
+from numba.typed import List
+from numba import njit
 
 # This function is passed a simulation object from the main program
 # It returns a list of objects of type sites which is all the atoms (sites)
 # in the system.
+#@njit()
 def initializepositions(sim):
     # initialize the atom list
-    atom=[]
+    atom=List() # This line "declares" the list for numba.
+    #atom=[] # This line is regular python.
     
     # If the input file specificies "generate", then place the 
     # specified number of particles on a lattice.
@@ -59,7 +63,7 @@ def initializepositions(sim):
         
         # Calculate the length of one unit cell
         a=sim.length/nlin
-        
+
         # Loop around all the particles and assign the positions to a lattice.
         for zdir in range(nlin):
             for ydir in range(nlin):

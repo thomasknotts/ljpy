@@ -34,12 +34,12 @@ and virial for the state of the list of particles passed.
 
 # Import relevant libraries
 import numpy as np
-#from numba import jit
+from numba import njit
 
 # This function is passed a simulation object and a list of site object.
 # It returns the potential energy of the system and also assigns the 
 # forces on each site. 
-#@jit(nopython=True)
+@njit()
 def forces(sim,atom):
     # Variables
     hL=np.float(sim.length*0.5)   # half the box length

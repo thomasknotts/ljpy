@@ -97,7 +97,7 @@ sim=readinput(sys.argv)
 # back and forth between functions that use random numbers is to always get
 # the same sequence of random numbers for a given seed value.
 if sim.seedkeyvalue == "generate":
-    sim.seed=-1*np.longlong(time.time()) # make a seed from the system clock
+    sim.seed=-1*int(time.time()) # make a seed from the system clock
 random.seed(sim.seed) # initialize the rng
 
 # ========================================================================= #
