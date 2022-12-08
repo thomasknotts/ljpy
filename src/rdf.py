@@ -24,6 +24,7 @@
 # Email: thomas.knotts@byu.edu                                             	#
 # ========================================================================= #
 # Version 1.0 - February 2021                                              	#
+# Version 2.0 - December 2022 Changed from atom class to arrays for numba. 	#
 # ========================================================================= #
 
 """
@@ -33,7 +34,7 @@ radial distrubtion function from the simulation.
 # import relevant libraries
 import numpy as np
 
-def rdf_accumulate(sim, atom, h):
+def rdf_accumulate(sim, h, atomx, atomy, atomz):
     # Variables
     hL=sim.length*0.5   # half the box length
     N=np.int(sim.N)
@@ -42,9 +43,9 @@ def rdf_accumulate(sim, atom, h):
     for i in range(N-1):
         for j in range(i+1, N):
             # Calculate the distance between sites i and j
-            dx=atom[i].x-atom[j].x
-            dy=atom[i].y-atom[j].y
-            dz=atom[i].z-atom[j].z
+            dx=atomx[i]-atomx[j]
+            dy=atomy[i]-atomy[j]
+            dz=atomz[i]-atomz[j]
             
             # Minimum image convention
             if np.abs(dx)>hL:

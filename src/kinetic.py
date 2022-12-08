@@ -24,6 +24,7 @@
 # Email: thomas.knotts@byu.edu                                             	#
 # ========================================================================= #
 # Version 1.0 - February 2021                                              	#
+# Version 2.0 - December 2022 Changed from atom class to arrays for numba. 	#
 # ========================================================================= #
 
 """
@@ -34,37 +35,37 @@ one returns both the kinetic energy and the temperature.
 
 # This function is passed a list of site objects.
 # It returns the kinetic energy of the system.
-def kinetic_energy(atom):
+def kinetic_energy(atomvx, atomvy, atomvz):
     # Determine the number of particles
-    N=len(atom)
+    N=len(atomvx)
     
     # Zero out the accumulator for the energy
     ke=0.0
     # Loop around the farticls to calculate the kinetic energy
     for i in range(N):
-        v2=atom[i].vx*atom[i].vx + atom[i].vy*atom[i].vy + \
-           atom[i].vz*atom[i].vz
+        v2=atomvx[i]*atomvx[i] + atomvy[i]*atomvy[i] + \
+           atomvz[i]*atomvz[i]
         ke=ke+0.5*v2
     
     return(ke)
 
 # This function is passed the a list of site objects.
 # It returns the temperature of the system.
-def temperature(atom):
+def temperature(atomvx, atomvy, atomvz):
     # Determine the number of particles
-    N=len(atom)
+    N=len(atomvx)
     # Calculate the temperature from the kinetic energy
-    T=2.0/3.0/N*kinetic_energy(atom)
+    T=2.0/3.0/N*kinetic_energy(atomvx, atomvy, atomvz)
     return(T)
 
 # This function is passed the a list of site objects.
 # It returns a tuple with the kinetic energy and the temperature of
 # the system.
-def ke_and_T(atom):
+def ke_and_T(atomvx, atomvy, atomvz):
     # Determine the number of particles
-    N=len(atom)
+    N=len(atomvx)
     # Calculate the kinetic energy of the system.
-    ke=kinetic_energy(atom)
+    ke=kinetic_energy(atomvx, atomvy, atomvz)
     # Calculate the temperature from the kinetic energy
     T=2.0/3.0/N*ke
     return(ke,T)

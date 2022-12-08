@@ -40,9 +40,9 @@ import numpy as np
 # This function is passed the simulation object, a list of site objects and 
 # the desired temperature.
 # It scales the velocities to the desired temperature.
-def scalevelocities(sim,atom,temp):
+def scalevelocities(sim,atomvx, atomvy, atomvz, temp):
     scale=np.sqrt(sim.T/temp)
     for i in range(sim.N):
-        atom[i].vx=atom[i].vx*scale;
-        atom[i].vy=atom[i].vy*scale;
-        atom[i].vz=atom[i].vz*scale;
+        atomvx[i]=atomvx[i]*scale;
+        atomvy[i]=atomvy[i]*scale;
+        atomvz[i]=atomvz[i]*scale;

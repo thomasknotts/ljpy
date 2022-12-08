@@ -35,7 +35,8 @@ velocities to ensure that the linear momentum is zero.
 
 # This function returns 0 if the linear momentum is zero (or close to zero)
 # It returns 1 if the linear momentum is not zero
-def checkmomentum():  
+import src.ljpyclasses
+def checkmomentum(atomvx, atomvy, atomvz):  
     # Zero out the momentum counters
     vcumx=0.0
     vcumy=0.0
@@ -56,7 +57,7 @@ def checkmomentum():
 # This function attemps to zero out the linear momentum.
 # It returns 0 if the linear momentum is zero (or close to zero)
 # It returns 1 if the linear momentum is not zero    
-def zeromomentum():
+def zeromomentum(atomvx, atomvy, atomvz):
     # Determine the number of particles
     N=len(atomvx)
     
@@ -81,5 +82,5 @@ def zeromomentum():
         atomvy[i]=atomvy[i]-vcumy
         atomvz[i]=atomvz[i]-vcumz
         
-    return(checkmomentum())
+    return(checkmomentum(atomvx, atomvy, atomvz))
     

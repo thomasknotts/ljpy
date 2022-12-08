@@ -24,6 +24,7 @@
 # Email: thomas.knotts@byu.edu                                             	#
 # ========================================================================= #
 # Version 1.0 - February 2021                                              	#
+# Version 2.0 - December 2022 Changed from atom class to arrays for numba. 	#
 # ========================================================================= #
 
 """
@@ -40,17 +41,7 @@ import numpy as np
 # This function is passed a simulation object from the main program
 # It returns a list of objects of type sites which is all the atoms (sites)
 # in the system.
-def initializepositions(sim):
-    # initialize the numpy arrays the atoms
-    atomx=np.zeros(sim.N)         # x position
-    atomy=np.zeros(sim.N)         # y position
-    atomz=np.zeros(sim.N)         # z position
-    atomfx=np.zeros(sim.N)        # x force
-    atomfy=np.zeros(sim.N)        # y force
-    atomfz=np.zeros(sim.N)        # z force
-    if (sim.method=='mc'):
-        atompe=np.zeros(sim.N)    # potential energy of site (MC)
-     
+def initializepositions(sim, atomx, atomy, atomz):   
     # If the input file specificies "generate", then place the 
     # specified number of particles on a lattice.
     if sim.icoord == "generate" or sim.icoord == None:
