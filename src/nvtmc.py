@@ -41,9 +41,8 @@ from src.finalize_file import finalizefile
 import src.dhist as dh
 import numpy as np
 
-def nvtmc(sim, atomx, atomy, atomz): 
+def nvtmc(sim, atom):
     # Variables
-    atompe=np.zeros(sim.N,np.float64)
     freq_scale_delta=1 # frequency to scale the maximum displacement
     
     # Create objects for the instanteous and average properties
@@ -51,7 +50,7 @@ def nvtmc(sim, atomx, atomy, atomz):
     aprop=props()
     
     # Determine the initial properties (Iteration 0) and write to file.
-    iprop.pe, iprop.virial, atomfx, atomfy, atomfz = forces(sim, atomx, atomy, atomz) # calculate the forces
+    iprop.pe, iprop.virial = forces(sim, atom)
     P=sim.rho*sim.T + 1.0/3.0/sim.length**3.0*iprop.virial + sim.ptail
     fp=open(sim.outputfile, "a")
     fp.write("{:<13}    {:13.6f}    {:13.6f}    {:13.6f}\n" \
@@ -63,7 +62,7 @@ def nvtmc(sim, atomx, atomy, atomz):
     # to calculate the change in energy between the current state
     # and a proposed state (move).
     for i in range(sim.N):
-        atompe[i]=atomic_pe(sim, atomx, atomy, atomz, i)
+        atom[i].pe=atomic_pe(sim, atom, i)
         
     
     # Perform the equilibration steps
@@ -71,7 +70,7 @@ def nvtmc(sim, atomx, atomy, atomz):
     for i in range(1, np.int(sim.eq+1)):
         for j in range(sim.N): # This loop performs sim.N moves per step
             # Propose and accept or reject a move
-            move(sim, atomx, atomy, atomz, atompe, iprop)
+            move(sim,atom,iprop)
             
             # Accumulate the properties for the move
             aprop.pe+=iprop.pe
@@ -112,7 +111,7 @@ def nvtmc(sim, atomx, atomy, atomz):
     for i in range(1, np.int(sim.pr+1)):
         for j in range(sim.N): # This loop performs sim.N moves per step
             # Propose and accept or reject a move
-            move(sim, atomx, atomy, atomz, atompe, iprop)
+            move(sim,atom,iprop)
             
             # Accumulate the properties for the move
             aprop.pe+=iprop.pe
@@ -123,7 +122,7 @@ def nvtmc(sim, atomx, atomy, atomz):
         if sim.rdf:
             if i%sim.rdf == 0:
                 Nrdfcalls+=1
-                rdf_accumulate(sim, rdfh, atomx, atomy, atomz)
+                rdf_accumulate(sim, atom, rdfh)
        
         # Output equilibration progress at the interval specified
         # in the input file
@@ -138,14 +137,11 @@ def nvtmc(sim, atomx, atomy, atomz):
             print("Equilibration Step " + str(i) + "\n")
         
         # Scale delta to obtain desired acceptance of moves
-        if i%100 == 0: scale_delta(sim,iprop,aprop)
+        if i%freq_scale_delta == 0: scale_delta(sim,iprop,aprop)
         
     # Finalize the output file after all equilibration and production    
     # steps are finished.  This calculates and write the averages to the 
     # output file.
-    dummy=np.zeros(sim.N) # need dummay arrays for next function
-    finalizefile(sim, aprop, rdfh, Nrdfcalls, atomx, atomy, atomz,  \
-                                              dummy, dummy, dummy, \
-                                              dummy, dummy, dummy)    
+    finalizefile(sim, atom, aprop, rdfh, Nrdfcalls)
     
     

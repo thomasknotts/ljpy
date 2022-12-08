@@ -33,7 +33,6 @@ to calculate the difference in energies for use in the metropolis criterion.
 """
 # Import relevant libraries
 import numpy as np
-import numba as nb
 
 # This functions take a simulation object, a list of site objects, the
 # particle that is moved, and the coordinates of the particle that is moved.
@@ -41,35 +40,32 @@ import numba as nb
 # particles in the system. This subroutine is called twice for one monte carlo
 # move. It returns the potential energy of the particle for the state
 # in atom.
-#@nb.njit(nopython=True)
-def atomic_pe(sim, atomx, atomy, atomz, particle):
+
+def atomic_pe(sim, atom, particle):
     # Variables
-    junk=np.float64(34)
-    hL=np.float64(np.float64(sim.length)/2.0)
-    N=np.int64(sim.N)
-    length=np.float64(sim.length)
+    hL=sim.length/2.0
     
     # Zero out the potential energy accumulator
-    u=np.float64(0.0)
+    u=0.0
     
     # Loop around the neighbors of the selected particle to get the
     # energy.
-    for i in range(np.int64(sim.N)):
+    for i in range(sim.N):
         if particle != i: # exclude particle i from itself
-            dx=np.float64(atomx[i]-atomx[particle])
-            dy=np.float64(atomy[i]-atomy[particle])
-            dz=np.float64(atomz[i]-atomz[particle])
+            dx=atom[i].x-atom[particle].x
+            dy=atom[i].y-atom[particle].y
+            dz=atom[i].z-atom[particle].z
             
             # Apply minimum image convection
             if np.abs(dx)>hL:
-                if dx < 0.0: dx=dx+length
-                else: dx=dx-length
+                if dx < 0.0: dx=dx+sim.length
+                else: dx=dx-sim.length
             if np.abs(dy)>hL:
-                if dy < 0.0: dy=dy+length
+                if dy < 0.0: dy=dy+sim.length
                 else: dy=dy-sim.length
             if np.abs(dz)>hL:
-                if dz < 0.0: dz=dz+length
-                else: dz=dz-length
+                if dz < 0.0: dz=dz+sim.length
+                else: dz=dz-sim.length
             
             # Distance and energy calculation        
             dr=dx*dx+dy*dy+dz*dz

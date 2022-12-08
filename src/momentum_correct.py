@@ -24,7 +24,6 @@
 # Email: thomas.knotts@byu.edu                                             	#
 # ========================================================================= #
 # Version 1.0 - February 2021                                              	#
-# Version 2.0 - December 2022                                             	#
 # ========================================================================= #
 
 """
@@ -33,33 +32,12 @@ see if the linear momentrum of the box is zero. Thd second adjusts the
 velocities to ensure that the linear momentum is zero.
 """
 
-# This function returns 0 if the linear momentum is zero (or close to zero)
-# It returns 1 if the linear momentum is not zero
-import src.ljpyclasses
-def checkmomentum(atomvx, atomvy, atomvz):  
-    # Zero out the momentum counters
-    vcumx=0.0
-    vcumy=0.0
-    vcumz=0.0
-    
-    # Loop around the atoms in the system to determine the momentum
-    # The dimensionless mass is equal to 1, so the momentum of each 
-    # atom is equal to its velocity.
-    for i in range(len(atomvx)):
-        vcumx=vcumx+atomvx[i]
-        vcumy=vcumy+atomvy[i]
-        vcumz=vcumz+atomvz[i]
-    if(vcumx+vcumy+vcumz)< 10.0**-10.0: return(0)
-    else: return(1)
-
-
-
-# This function attemps to zero out the linear momentum.
+# This function is passed a list of site objects.
 # It returns 0 if the linear momentum is zero (or close to zero)
-# It returns 1 if the linear momentum is not zero    
-def zeromomentum(atomvx, atomvy, atomvz):
+# It returns 1 if the linear momentum is not zero
+def checkmomentum(atom):
     # Determine the number of particles
-    N=len(atomvx)
+    N=len(atom)
     
     # Zero out the momentum counters
     vcumx=0.0
@@ -70,17 +48,41 @@ def zeromomentum(atomvx, atomvy, atomvz):
     # The dimensionless mass is equal to 1, so the momentum of each 
     # atom is equal to its velocity.
     for i in range(N):
-        vcumx=vcumx+atomvx[i]
-        vcumy=vcumy+atomvy[i]
-        vcumz=vcumz+atomvz[i]
+        vcumx=vcumx+atom[i].vx
+        vcumy=vcumy+atom[i].vy
+        vcumz=vcumz+atom[i].vz
+    if(vcumx+vcumy+vcumz)< 10.0**-10.0: return(0)
+    else: return(1)
+
+
+# This function is passed a list of site objectss.
+# It attemps to zero out the linear momentum.
+# It returns 0 if the linear momentum is zero (or close to zero)
+# It returns 1 if the linear momentum is not zero    
+def zeromomentum(atom):
+    # Determine the number of particles
+    N=len(atom)
+    
+    # Zero out the momentum counters
+    vcumx=0.0
+    vcumy=0.0
+    vcumz=0.0
+    
+    # Loop around the atoms in the system to determine the momentum
+    # The dimensionless mass is equal to 1, so the momentum of each 
+    # atom is equal to its velocity.
+    for i in range(N):
+        vcumx=vcumx+atom[i].vx
+        vcumy=vcumy+atom[i].vy
+        vcumz=vcumz+atom[i].vz
     vcumx=vcumx/N
     vcumy=vcumy/N
     vcumz=vcumz/N
     
     for i in range(N):
-        atomvx[i]=atomvx[i]-vcumx    
-        atomvy[i]=atomvy[i]-vcumy
-        atomvz[i]=atomvz[i]-vcumz
+        atom[i].vx=atom[i].vx-vcumx    
+        atom[i].vy=atom[i].vy-vcumy
+        atom[i].vz=atom[i].vz-vcumz
         
-    return(checkmomentum(atomvx, atomvy, atomvz))
+    return(checkmomentum(atom))
     

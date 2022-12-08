@@ -24,7 +24,6 @@
 # Email: thomas.knotts@byu.edu                                             	#
 # ========================================================================= #
 # Version 1.0 - February 2021                                              	#
-# Version 2.0 - December 2022 Changed from atom class to arrays for numba. 	#
 # ========================================================================= #
 
 """
@@ -55,6 +54,7 @@ also refer to the included documentation.
 import sys, random, time
 from datetime import datetime
 import numpy as np
+
 #from ljpyclasses import simulation, site, props
 #from src.ljpyclasses import site
 from src.read_input import readinput
@@ -88,49 +88,39 @@ if len(sys.argv) != 3:
 sim=readinput(sys.argv)
 
 # ========================================================================= #
-# Initialize the global variables.                                          #
-# ========================================================================= #
-atomx=np.zeros(sim.N, dtype=np.float64)     # x position
-atomy=np.zeros(sim.N, dtype=np.float64)     # y position
-atomz=np.zeros(sim.N, dtype=np.float64)     # z position
-atomvx=np.zeros(sim.N, dtype=np.float64)    # x velocity
-atomvy=np.zeros(sim.N, dtype=np.float64)    # y velocity
-atomvz=np.zeros(sim.N, dtype=np.float64)    # z velocity
-
-
-# ========================================================================= #
 # Initialize the random number generator (rng).                             #
 # ========================================================================= #
-# Use the seed specified in the input file. 
+# Use the seed specified in the input file. Otherwise, get the seed from
+# the system clock.
 # Note: The current state of the rng is saved so that it can be passed
 # to functions that use random numbers. The purpose of passing the state
 # back and forth between functions that use random numbers is to always get
 # the same sequence of random numbers for a given seed value.
-if sim.seedkeyvalue != "generate":
-    #sim.seed=-1*np.longlong(time.time()) # make a seed from the system clock
-    random.seed(sim.seed) # initialize the rng
+if sim.seedkeyvalue == "generate":
+    sim.seed=-1*np.longlong(time.time()) # make a seed from the system clock
+random.seed(sim.seed) # initialize the rng
 
 # ========================================================================= #
 # Initialize or read in positions.                                          #
 # ========================================================================= #
-initializepositions(sim, atomx, atomy, atomz)
+atom=initializepositions(sim)
 
 # ========================================================================= #
 # Initialize or read in velocities for an md simulation.                    #
 # Note: randstate is updated by initializevelocities.                       #
 # ========================================================================= #
-if sim.method == "md": initializevelocities(sim, atomvx, atomvy, atomvz)
+if sim.method == "md": initializevelocities(sim, atom)
 
 # ========================================================================= #
 # Initialize the output files.                                              #
 # ========================================================================= #
-initializefiles(sim, atomx, atomy, atomz, atomvx, atomvy, atomvz)
+initializefiles(sim, atom)
 
 # ========================================================================= #
 # Call the driver for the md or mc simulation.                              #
 # ========================================================================= #
-if sim.method == "md": nvemd(sim, atomx, atomy, atomz, atomvx, atomvy, atomvz)
-else: nvtmc(sim, atomx, atomy, atomz)
+if sim.method == "md": nvemd(sim,atom)
+else: nvtmc(sim,atom)
   
 # ========================================================================= #
 # Calculate the wall time and finalize the simulation.                      #

@@ -44,25 +44,23 @@ from src.forces import forces
 # current state of the random number generator, and a property object.
 # It returns True if the move is accepted. It returns False if the move is
 # rejected.
-def move(sim, atomx, atomy, atomz, atompe, iprop):
+def move(sim, atom, iprop):
     # Set the state of the random number generator
-    #random.setstate(randstate)
     
     # Select a random particle
     iprop.ntry+=1
     particle=random.randint(0, sim.N-1)
-    #print("particle =",particle)
     
     # Save the current (old) position of the system in case
     # the move is not accepted 
-    xold=atomx[particle]
-    yold=atomy[particle]
-    zold=atomz[particle]
+    xold=atom[particle].x
+    yold=atom[particle].y
+    zold=atom[particle].z
                            
     # Propose a new move                        
-    xnew=atomx[particle] + random.uniform(-1, 1)*sim.dt
-    ynew=atomy[particle] + random.uniform(-1, 1)*sim.dt
-    znew=atomz[particle] + random.uniform(-1, 1)*sim.dt
+    xnew=atom[particle].x + random.uniform(-1, 1)*sim.dt
+    ynew=atom[particle].y + random.uniform(-1, 1)*sim.dt
+    znew=atom[particle].z + random.uniform(-1, 1)*sim.dt
 
     # Apply periodic boundary conditions
     if xnew<0.0: 
@@ -81,29 +79,27 @@ def move(sim, atomx, atomy, atomz, atompe, iprop):
         znew-=sim.length
     
     # Calculate the energy of the proposed move
-    atomx[particle]=xnew
-    atomy[particle]=ynew
-    atomz[particle]=znew
-    penew=atomic_pe(sim, atomx, atomy, atomz, particle)
+    atom[particle].x=xnew
+    atom[particle].y=ynew
+    atom[particle].z=znew
+    penew=atomic_pe(sim, atom, particle)
     
     # Calculate the different in energy between the 
     # proposed and old state of the system
-    de=penew-atompe[particle]
+    de=penew-atom[particle].pe
+    
     # Accept/Reject the move
-    #print("ede {:.3f}\n".format(np.exp(-de/sim.T)))
-    #print("rand {:.3f}\n".format(rand))
-    if rand < np.exp(-de/sim.T): # accept
-        #print("accepted {:.3f}\n".format(np.exp(-de/sim.T)))
+    if random.uniform(0,1) < np.exp(-de/sim.T): # accept
         iprop.naccept+=1
-        iprop.pe, iprop.virial, atomfx, atomfy, atomfz = forces(sim, atomx, atomy, atomz) # calculate the forces
+        iprop.pe, iprop.virial=forces(sim, atom)
         iprop.pe2=iprop.pe*iprop.pe
-        atompe[particle]=penew # set "current" site pe to new pe 
+        atom[particle].pe=penew # set "current" site pe to new pe 
         return(True)
     else: #reject
         # revert the positions to the "old" or previous state
-        atomx[particle]=xold
-        atomy[particle]=yold
-        atomz[particle]=zold
+        atom[particle].x=xold
+        atom[particle].y=yold
+        atom[particle].z=zold
         return(False)
     
     

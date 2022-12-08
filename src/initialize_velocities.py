@@ -24,7 +24,6 @@
 # Email: thomas.knotts@byu.edu                                             	#
 # ========================================================================= #
 # Version 1.0 - February 2021                                              	#
-# Version 2.0 - December 2022 Changed from atom class to arrays for numba. 	#
 # ========================================================================= #
 
 """
@@ -43,33 +42,30 @@ from src.kinetic import temperature
 from src.scale_velocities import scalevelocities
 
 
-# This function is passed a simulation object
+# This function is passed a simulation object, a list of site objects, and
 # the current state of the random number generator from the main program
 # It sets the velocities of each particle in the site object.
-def initializevelocities(sim, atomvx, atomvy, atomvz):
+def initializevelocities(sim,atom):
     # If the input file specificies "generate" or the vel keywork is
     # omitted, then randomly generate the velocities
-
     if sim.ivel == "generate" or sim.ivel == None:
-        # Set the current state of the rng
-        random.setstate(randstate)
         # Loop around the sites and assign random velocities from -1.0 to 1.0  
         for i in range(sim.N):
-            atomvx[i]=random.uniform(-1, 1)
-            atomvy[i]=random.uniform(-1, 1)
-            atomvz[i]=random.uniform(-1, 1)
+            atom[i].vx=random.uniform(-1, 1)
+            atom[i].vy=random.uniform(-1, 1)
+            atom[i].vz=random.uniform(-1, 1)
             
         # Zero out the linear momentum
-        momentum_flag=zeromomentum(atomvx, atomvy, atomvz)
+        momentum_flag=zeromomentum(atom)
         if momentum_flag:
             sys.exit("The linear momentum could not be zeroed out when " +
                      "the velocities were initialized.")
-        #print("v17=" + str(atom[17].vx))
+        print("v17=" + str(atom[17].vx))
         # Determine the temperature of the randomly-assigned velocities
-        T=temperature(atomvx, atomvy, atomvz)
+        T=temperature(atom)
         
         # Scale the temperatures to the system temperature
-        scalevelocities(sim, atomvx, atomvy, atomvz, T)
+        scalevelocities(sim,atom,T)
         
     # If a file with velocities is supplied, read the velocities.
     else:
@@ -97,9 +93,9 @@ def initializevelocities(sim, atomvx, atomvy, atomvz):
                          "\"\n")
             else:
                 try:
-                    atomvx[particle] = np.float(xyz[0])
-                    atomvy[particle] = np.float(xyz[1])
-                    atomvz[particle] = np.float(xyz[2])
+                    atom[particle].vx = np.float(xyz[0])
+                    atom[particle].vy = np.float(xyz[1])
+                    atom[particle].vz = np.float(xyz[2])
                 except ValueError:
                     sys.exit("There is a problem with the velocities for " +
                              "atom " + str(particle+1) + " in \"" + 
@@ -114,4 +110,3 @@ def initializevelocities(sim, atomvx, atomvy, atomvz):
                      "in \"" + sim.ivel + "\" is not equal to the number " +
                      "of atoms " + "(" + str(sim.N) + ") in \"" + 
                      sim.inputfile + "\"\n")
-

@@ -24,7 +24,6 @@
 # Email: thomas.knotts@byu.edu                                             	#
 # ========================================================================= #
 # Version 1.0 - February 2021                                              	#
-# Version 2.0 - December 2022 Changed from atom class to arrays for numba. 	#
 # ========================================================================= #
 
 """
@@ -32,48 +31,45 @@ This module is part of ljpy. It contains two functions to integrate the
 equations of motion using the velocity verlet algorithm.
 """
 
-# This function is passed a simulation object.
+# This function is passed a simulation object and a list of site objects.
 # It is the first needed to use the velocity verlet algorithm. It uses
 # the data at time step t to update the positions to the next time step and
 # the velocities to the next half time step.
-def verlet1(sim, atomx,  atomy,  atomz,  \
-                 atomvx, atomvy, atomvz, \
-                 atomfx, atomfy, atomfz, \
-                 atomdx, atomdy, atomdz):
+def verlet1(sim, atom):
     
     for i in range(sim.N):
         # Update the positions to a full time step.
-        dx=sim.dt*atomvx[i]+sim.dt*sim.dt*atomfx[i]/2.0
-        dy=sim.dt*atomvy[i]+sim.dt*sim.dt*atomfy[i]/2.0
-        dz=sim.dt*atomvz[i]+sim.dt*sim.dt*atomfz[i]/2.0
-        atomx[i]=atomx[i]+dx
-        atomy[i]=atomy[i]+dy
-        atomz[i]=atomz[i]+dz
+        dx=sim.dt*atom[i].vx+sim.dt*sim.dt*atom[i].fx/2.0
+        dy=sim.dt*atom[i].vy+sim.dt*sim.dt*atom[i].fy/2.0
+        dz=sim.dt*atom[i].vz+sim.dt*sim.dt*atom[i].fz/2.0
+        atom[i].x=atom[i].x+dx
+        atom[i].y=atom[i].y+dy
+        atom[i].z=atom[i].z+dz
         
         # Update the displacement accumulators for diffusivity
-        atomdx[i]=atomdx[i]+dx
-        atomdy[i]=atomdy[i]+dy
-        atomdz[i]=atomdz[i]+dz
+        atom[i].dx=atom[i].dx+dx
+        atom[i].dy=atom[i].dy+dy
+        atom[i].dz=atom[i].dz+dz
         
         # Apply periodic boundary conditions
-        if atomx[i] < 0.0:          atomx[i]=atomx[i]+sim.length
-        elif atomx[i] > sim.length: atomx[i]=atomx[i]-sim.length
-        if atomy[i] < 0.0:          atomy[i]=atomy[i]+sim.length
-        elif atomy[i] > sim.length: atomy[i]=atomy[i]-sim.length
-        if atomz[i] < 0.0:          atomz[i]=atomz[i]+sim.length
-        elif atomz[i] > sim.length: atomz[i]=atomz[i]-sim.length
+        if atom[i].x < 0.0:          atom[i].x=atom[i].x+sim.length
+        elif atom[i].x > sim.length: atom[i].x=atom[i].x-sim.length
+        if atom[i].y < 0.0:          atom[i].y=atom[i].y+sim.length
+        elif atom[i].y > sim.length: atom[i].y=atom[i].y-sim.length
+        if atom[i].z < 0.0:          atom[i].z=atom[i].z+sim.length
+        elif atom[i].z > sim.length: atom[i].z=atom[i].z-sim.length
         
         # Update the velocities to half a time step
-        atomvx[i]=atomvx[i]+sim.dt*atomfx[i]/2.0
-        atomvy[i]=atomvy[i]+sim.dt*atomfy[i]/2.0
-        atomvz[i]=atomvz[i]+sim.dt*atomfz[i]/2.0
+        atom[i].vx=atom[i].vx+sim.dt*atom[i].fx/2.0
+        atom[i].vy=atom[i].vy+sim.dt*atom[i].fy/2.0
+        atom[i].vz=atom[i].vz+sim.dt*atom[i].fz/2.0
         
-# This function is passed a simulation object.
+# This function is passed a simulation object and a list of site objects.
 # It is the second function needed to use the velocity verlet       
 # algorithm.  It updates the velocites from the half time step to the 
 # full time step.
-def verlet2(sim, atomvx, atomvy, atomvz, atomfx, atomfy, atomfz):
+def verlet2(sim, atom):
     for i in range(sim.N):
-        atomvx[i]=atomvx[i]+sim.dt*atomfx[i]/2.0
-        atomvy[i]=atomvy[i]+sim.dt*atomfy[i]/2.0
-        atomvz[i]=atomvz[i]+sim.dt*atomfz[i]/2.0       
+        atom[i].vx=atom[i].vx+sim.dt*atom[i].fx/2.0
+        atom[i].vy=atom[i].vy+sim.dt*atom[i].fy/2.0
+        atom[i].vz=atom[i].vz+sim.dt*atom[i].fz/2.0       

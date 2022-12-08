@@ -24,7 +24,6 @@
 # Email: thomas.knotts@byu.edu                                             	#
 # ========================================================================= #
 # Version 1.0 - February 2021                                              	#
-# Version 2.0 - December 2022 Changed from atom class to arrays for numba. 	#
 # ========================================================================= #
 
 """
@@ -42,15 +41,7 @@ import src.dhist as dh
 from src.rdf import rdf_accumulate
 from src.finalize_file import finalizefile
 
-def nvemd(sim, atomx,  atomy,  atomz, \
-               atomvx, atomvy, atomvz):
-
-    # initialize arrays for displacements
-    atomdx=np.zeros(sim.N)    # x displacement for diffusion
-    atomdy=np.zeros(sim.N)    # y displacement for diffusion
-    atomdz=np.zeros(sim.N)    # z displacement for diffusion
-    #atomdr2=np.zeros(sim.N)   # MSD accumulator for diffusion
-
+def nvemd(sim, atom):
     # Set variables
     rescale_freq=100
     
@@ -59,8 +50,8 @@ def nvemd(sim, atomx,  atomy,  atomz, \
     aprop=props()
     
     # Determine the initial properties (Iteration 0) and write to file.
-    iprop.pe, iprop.virial, atomfx, atomfy, atomfz = forces(sim, atomx, atomy, atomz)
-    iprop.ke, iprop.T = ke_and_T(atomvx, atomvy, atomvz)
+    iprop.pe, iprop.virial = forces(sim, atom)
+    iprop.ke, iprop.T = ke_and_T(atom)
     P=sim.rho*iprop.T + 1.0/3.0/sim.length**3.0*iprop.virial + sim.ptail
     fp=open(sim.outputfile, "a")
     fp.write("{:<13}    {:13.6f}    {:13.6f}    {:13.6f}    {:13.6f}    " \
@@ -75,13 +66,10 @@ def nvemd(sim, atomx,  atomy,  atomz, \
     # to the set point temperature. After equilibration, during production,
     # the velocities are no longer rescaled.
     for i in range(1,np.int(sim.eq+1)):
-        verlet1(sim, atomx,  atomy,  atomz,  \
-                     atomvx, atomvy, atomvz, \
-                     atomfx, atomfy, atomfz, \
-                     atomdx, atomdy, atomdz) # first half of velocity verlet algorithm
-        iprop.pe, iprop.virial, atomfx, atomfy, atomfz = forces(sim, atomx, atomy, atomz) # calculate the forces
-        verlet2(sim, atomvx, atomvy, atomvz, atomfx, atomfy, atomfz) # second half of velocity verlet algorithm
-        iprop.ke, iprop.T = ke_and_T(atomvx, atomvy, atomvz) # kinetic and potential energy
+        verlet1(sim, atom) # first half of velocity verlet algorithm
+        iprop.pe, iprop.virial = forces(sim, atom) # calculate the forces
+        verlet2(sim, atom) # second half of velocity verlet algorithm
+        iprop.ke, iprop.T = ke_and_T(atom) # kinetic and potential energy
         
         # Accumulate the properties
         aprop.pe=aprop.pe + iprop.pe
@@ -108,20 +96,17 @@ def nvemd(sim, atomx,  atomy,  atomz, \
         # Rescale the velocities to achieve the temperature specified
         # in the input file. This is only done during the equilibration
         # steps of MD simulations.
-        if i%rescale_freq == 0: scalevelocities(sim, atomvx, atomvy, atomvz, aprop.T/i)
+        if i%rescale_freq == 0: scalevelocities(sim, atom, aprop.T/i)
         
     # Reset the accumulators for the production steps
     aprop.pe=0.0
     aprop.ke=0.0
     aprop.T=0.0
     aprop.virial=0.0
-    atomdx=np.zeros(sim.N)
-    atomdy=np.zeros(sim.N)
-    atomdz=np.zeros(sim.N)
-    #for i in range(sim.N):
-    #    atomdx[i]=0.0
-    #    atomdy[i]=0.0
-    #    atomdz[i]=0.0
+    for i in range(sim.N):
+        atom[i].dx=0.0
+        atom[i].dy=0.0
+        atom[i].dz=0.0
     
     # Initialize the radial distribution function histogram
     if sim.rdf:
@@ -131,14 +116,10 @@ def nvemd(sim, atomx,  atomy,  atomz, \
     # Perform the production steps
     # During production, accumulate all the properties.
     for i in range(1,np.int(sim.pr+1)):
-        verlet1(sim, atomx,  atomy,  atomz,  \
-                     atomvx, atomvy, atomvz, \
-                     atomfx, atomfy, atomfz, \
-                     atomdx, atomdy, atomdz) # first half of velocity verlet algorithm
-        iprop.pe, iprop.virial, atomfx, atomfy, atomfz = forces(sim, atomx, atomy, atomz) # calculate the forces
-        verlet2(sim, atomvx, atomvy, atomvz, atomfx, atomfy, atomfz) # second half of velocity verlet algorithm
-        iprop.ke, iprop.T = ke_and_T(atomvx, atomvy, atomvz) # kinetic and potential energy
-
+        verlet1(sim, atom) # first half of velocity verlet algorithm
+        iprop.pe, iprop.virial = forces(sim, atom) # calculate the forces
+        verlet2(sim, atom) # second half of velocity verlet algorithm
+        iprop.ke, iprop.T = ke_and_T(atom) # kinetic and potential energy
         
         # Accumulate the properties
         aprop.pe+=iprop.pe
@@ -167,11 +148,10 @@ def nvemd(sim, atomx,  atomy,  atomz, \
         if sim.rdf:
             if i%sim.rdf == 0:
                 Nrdfcalls+=1
-                rdf_accumulate(sim, rdfh, atomx, atomy, atomz)
+                rdf_accumulate(sim, atom, rdfh)
         
     # Finalize the output file
-    finalizefile(sim, aprop, rdfh, Nrdfcalls, atomx,  atomy,  atomz,  \
-                                              atomvx, atomvy, atomvz, \
-                                              atomdx, atomdy, atomdz)
+    finalizefile(sim, atom, aprop, rdfh, Nrdfcalls)
 
+        
     print("pe =",iprop.pe,", virial =",iprop.virial,", ke =",iprop.ke,", T =",iprop.T)

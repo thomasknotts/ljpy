@@ -24,7 +24,6 @@
 # Email: thomas.knotts@byu.edu                                             	#
 # ========================================================================= #
 # Version 1.0 - February 2021                                              	#
-# Version 2.0 - December 2022 Changed from atom class to arrays for numba. 	#
 # ========================================================================= #
 
 """
@@ -40,39 +39,24 @@ Three classes are defined.
                 potential energy, kinetic energy, pressure, etc.
 """
 # The class for each site in the system
-# class site:
-    # def __init__(self):
-        # self.x=0.0      # x position
-        # self.y=0.0      # y position
-        # self.z=0.0      # z position
-        # self.vx=0.0     # x velocity
-        # self.vy=0.0     # y velocity
-        # self.vz=0.0     # z velocity
-        # self.fx=0.0     # x force
-        # self.fy=0.0     # y force
-        # self.fz=0.0     # z force
-        # self.dx=0.0     # x displacement for diffusion (MD)
-        # self.dy=0.0     # y displacement for diffusion (MD)
-        # self.dz=0.0     # z displayement for diffusion (MD)   
-        # self.dr2=0.0    # MSD accumulator for diffusion (MD)
-        # self.pe=0.0     # potential energy of site (MC)
-# global atomx     # x position
-# global atomy     # y position
-# global atomz     # z position
-# global atomvx    # x velocity
-# global atomvy    # y velocity
-# global atomvz    # z velocity    
-# global atomfx    # x force
-# global atomfy    # y force
-# global atomfz    # z force
-# global atomdx    # x displacement for diffusion (MD)
-# global atomdy    # y displacement for diffusion (MD)
-# global atomdz    # z displacement for diffusion (MD)
-# global atomdr2   # MSD accumulator for diffusion (MD)
-# global atompe    # potential energy of site (MC)
+class site:
+    def __init__(self):
+        self.x=0.0      # x position
+        self.y=0.0      # y position
+        self.z=0.0      # z position
+        self.vx=0.0     # x velocity
+        self.vy=0.0     # y velocity
+        self.vz=0.0     # z velocity
+        self.fx=0.0     # x force
+        self.fy=0.0     # y force
+        self.fz=0.0     # z force
+        self.dx=0.0     # x displacement for diffusion (MD)
+        self.dy=0.0     # y displacement for diffusion (MD)
+        self.dz=0.0     # z displayement for diffusion (MD)   
+        self.dr2=0.0    # MSD accumulator for diffusion (MD)
+        self.pe=0.0     # potential energy of site (MC)
         
 # The class to hold the simulation information
-import numpy as np
 class simulation:
     def __init__(self):
         self.method = None      # simulation method (md or mc)
@@ -89,7 +73,7 @@ class simulation:
         self.ivel=None          # filename for initial velocities
         self.inputfile=None     # name of input file
         self.outputfile=None    # name of output file
-        self.length=np.float64(0.0)         # length of simulation blox
+        self.length=0.0         # length of simulation blox
         self.output=0           # interval for ouput of instan. props.
         self.movie=0            # interval for movie frames
         self.moviefile=None     # name of movie file
