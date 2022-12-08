@@ -137,7 +137,7 @@ def nvtmc(sim, atom):
             print("Equilibration Step " + str(i) + "\n")
         
         # Scale delta to obtain desired acceptance of moves
-        if i%freq_scale_delta == 0: scale_delta(sim,iprop,aprop)
+        if i%100 == 0: scale_delta(sim,iprop,aprop)
         
     # Finalize the output file after all equilibration and production    
     # steps are finished.  This calculates and write the averages to the 

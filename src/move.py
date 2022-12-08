@@ -44,9 +44,7 @@ from src.forces import forces
 # current state of the random number generator, and a property object.
 # It returns True if the move is accepted. It returns False if the move is
 # rejected.
-def move(sim, atom, iprop):
-    # Set the state of the random number generator
-    
+def move(sim, atom, iprop):   
     # Select a random particle
     iprop.ntry+=1
     particle=random.randint(0, sim.N-1)
@@ -87,7 +85,7 @@ def move(sim, atom, iprop):
     # Calculate the different in energy between the 
     # proposed and old state of the system
     de=penew-atom[particle].pe
-    
+   
     # Accept/Reject the move
     if random.uniform(0,1) < np.exp(-de/sim.T): # accept
         iprop.naccept+=1

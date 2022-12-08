@@ -46,17 +46,7 @@ from src.scale_velocities import scalevelocities
 # This function is passed a simulation object
 # the current state of the random number generator from the main program
 # It sets the velocities of each particle in the site object.
-def initializevelocities(sim):
-    # initialize the arrays holding the velocities and
-    # diffusion variables
-    atomvx=np.zeros(sim.N)    # x velocity
-    atomvy=np.zeros(sim.N)    # y velocity
-    atomvz=np.zeros(sim.N)    # z velocity
-    atomdx=np.zeros(sim.N)    # x displacement for diffusion
-    atomdy=np.zeros(sim.N)    # y displacement for diffusion
-    atomdz=np.zeros(sim.N)    # z displacement for diffusion
-    atomdr2=np.zeros(sim.N)   # MSD accumulator for diffusion
-
+def initializevelocities(sim,atom):
     # If the input file specificies "generate" or the vel keywork is
     # omitted, then randomly generate the velocities
 

@@ -98,6 +98,7 @@ sim=readinput(sys.argv)
 if sim.seedkeyvalue == "generate":
     sim.seed=-1*np.longlong(time.time()) # make a seed from the system clock
 random.seed(sim.seed) # initialize the rng
+#randstate=random.getstate() # save the state of the rng
 
 # ========================================================================= #
 # Initialize or read in positions.                                          #
@@ -108,7 +109,7 @@ atom=initializepositions(sim)
 # Initialize or read in velocities for an md simulation.                    #
 # Note: randstate is updated by initializevelocities.                       #
 # ========================================================================= #
-#if sim.method == "md": initializevelocities(sim, atom)
+if sim.method == "md": initializevelocities(sim, atom)
 
 # ========================================================================= #
 # Initialize the output files.                                              #
@@ -118,9 +119,9 @@ atom=initializepositions(sim)
 # ========================================================================= #
 # Call the driver for the md or mc simulation.                              #
 # ========================================================================= #
-#if sim.method == "md": nvemd(sim,atom)
-#else: nvtmc(sim,atom)
-  
+if sim.method == "md": nvemd(sim,atom)
+else: nvtmc(sim,atom)
+
 # ========================================================================= #
 # Calculate the wall time and finalize the simulation.                      #
 # ========================================================================= #
