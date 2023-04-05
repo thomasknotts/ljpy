@@ -102,9 +102,11 @@ def nvtmc(sim, atom):
     aprop.virial=0.0
         
     # Initialize the radial distribution function histogram
+    Nrdfcalls=0
     if sim.rdf:
         rdfh=dh.hist(sim.rdfmin, sim.rdfmax,sim.rdfN)
-        Nrdfcalls=0
+    else:
+        rdfh=dh.hist(0.8, 4.0, 100) # this is the default
     
     # Perform the production steps
     # During production, accumulate all the properties.    
