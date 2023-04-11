@@ -121,3 +121,9 @@ class props:
         self.naccept=0          # number of mc moves accepted
         self.ntry=0             # number of mc moves tried
         self.Nhist=0            # number of times accumulated
+        self.pxx=0.0            # pressure tensor xx
+        self.pxy=0.0            # pressure tensor xy
+        self.pxz=0.0            # pressure tensor xz
+        self.pyy=0.0            # pressure tensor yy
+        self.pyz=0.0            # pressure tensor yz
+        self.pzz=0.0            # pressure tensor zz
