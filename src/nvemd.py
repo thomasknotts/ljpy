@@ -122,7 +122,7 @@ def nvemd(sim, atom):
         iprop.pe, iprop.virial = forces(sim, atom) # calculate the forces
         verlet2(sim, atom) # second half of velocity verlet algorithm
         iprop.ke, iprop.T = ke_and_T(atom) # kinetic and potential energy
-        
+
         # Accumulate the properties
         aprop.pe+=iprop.pe
         aprop.ke+=iprop.ke

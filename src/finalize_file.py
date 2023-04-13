@@ -88,7 +88,12 @@ def finalizefile(sim, atom, aprop, rdfh, rdfcalls):
     if sim.rdf:
         fp.write("\n***Radial Distribution Function***\n\n");
         rdf_finalize(sim, rdfh, rdfcalls)
-        rdfh.write(fp)
+        # rdfh.write(fp) # numba doesn't like this. I can't figure out the fix.
+                         # I hardcoded the rdf write below.
+        for i in range(rdfh.N): 
+            fp.write("{:>10}\t{:13.6f}\t{:13.6f}\n".format(i+1, \
+                     rdfh.mrange[i], rdfh.bin[i]))
+
 
 
     if sim.pr > 0:

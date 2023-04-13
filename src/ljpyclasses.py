@@ -41,6 +41,7 @@ Three classes are defined.
 # The code below is the use numba to speed up the calculation
 # of the loops.
 import numba as nb
+import numpy as np
 site_spec = [('x',nb.float64),  ('y',nb.float64), ('z',nb.float64),   \
              ('vx',nb.float64), ('vy',nb.float64), ('vz',nb.float64), \
              ('fx',nb.float64), ('fy',nb.float64), ('fz',nb.float64), \
@@ -57,6 +58,10 @@ sim_spec = [('method',nb.types.unicode_type), ('T',nb.float64),  \
             ('ptail',nb.float64), ('seed',nb.int64), \
             ('seedkeyvalue',nb.types.unicode_type), ('rdfmin',nb.float64), 
             ('rdfmax',nb.float64), ('rdfN',nb.int64), ('rdf',nb.int64)]
+props_spec = [('ke',nb.float64),  ('pe',nb.float64), ('pe2',nb.float64),   \
+             ('T',nb.float64), ('virial',nb.float64), ('naccept',nb.int64), \
+             ('ntry',nb.int64), ('Nhist',nb.int64), ('sxx',nb.float64)]
+    
             
 # The class for each site in the system
 @nb.experimental.jitclass(site_spec)
@@ -93,24 +98,25 @@ class simulation:
         self.rc=0.0             # cutoff radius [r*]
         self.rc2=0.0            # square of cutoff radius [r*]
         self.dt=0.0             # time step for md or max delta for mc
-        self.icoord=''        # filename for initial coordinates
-        self.ivel=''          # filename for initial velocities
-        self.inputfile=''     # name of input file
-        self.outputfile=''    # name of output file
+        self.icoord=''          # filename for initial coordinates
+        self.ivel=''            # filename for initial velocities
+        self.inputfile=''       # name of input file
+        self.outputfile=''      # name of output file
         self.length=0.0         # length of simulation blox
         self.output=0           # interval for ouput of instan. props.
         self.movie=0            # interval for movie frames
-        self.moviefile=''     # name of movie file
+        self.moviefile=''       # name of movie file
         self.utail=0.0          # tail correction to energy
         self.ptail=0.0          # tail correction to pressure
         self.seed=-1            # seed to the random number generator
-        self.seedkeyvalue=''  # key value for seed
+        self.seedkeyvalue=''    # key value for seed
         self.rdfmin=0.0         # minimum r value for rdf
         self.rdfmax=0.0         # maximum r value for rdf
         self.rdfN=0             # number of bins for rdf
         self.rdf=0              # frequency to accumulate the rdf
         
 # The class to hold the simulation properties
+@nb.experimental.jitclass(props_spec)
 class props:
     def __init__(self):
         self.ke=0.0             # kinetic energy
@@ -121,9 +127,4 @@ class props:
         self.naccept=0          # number of mc moves accepted
         self.ntry=0             # number of mc moves tried
         self.Nhist=0            # number of times accumulated
-        self.pxx=0.0            # pressure tensor xx
-        self.pxy=0.0            # pressure tensor xy
-        self.pxz=0.0            # pressure tensor xz
-        self.pyy=0.0            # pressure tensor yy
-        self.pyz=0.0            # pressure tensor yz
-        self.pzz=0.0            # pressure tensor zz
+        self.sxx=0.0            # stress tensor xx

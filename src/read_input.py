@@ -77,7 +77,7 @@ def readinput(args):
     # double, float, etc. Also, each keyword is checked for proper type and 
     # the presenence of required keywords are checked. The program terminates
     # if any required keywords are missing or if invalid values are provided.
-    
+
     sim=simulation()     # create the sim object that will hold the information
     
     # -------- sim keyword -------- #
@@ -260,7 +260,7 @@ def readinput(args):
                                          sim.rc**(-3.0))
     sim.ptail = 16.0 / 3.0*np.pi*sim.rho*sim.rho*(2.0 / 3.0 * sim.rc**(-9.0) -
                                                   sim.rc**(-3.0))
-    
+
     return sim
 
 
