@@ -50,7 +50,7 @@ def nvemd(sim, atom):
     aprop=props()
     
     # Determine the initial properties (Iteration 0) and write to file.
-    iprop.pe, iprop.virial = forces(sim, atom)
+    iprop.pe, iprop.virial, iprop.stress = forces(sim, atom)
     iprop.ke, iprop.T = ke_and_T(atom)
     P=sim.rho*iprop.T + 1.0/3.0/sim.length**3.0*iprop.virial + sim.ptail
     fp=open(sim.outputfile, "a")
@@ -67,7 +67,7 @@ def nvemd(sim, atom):
     # the velocities are no longer rescaled.
     for i in range(1,np.int(sim.eq+1)):
         verlet1(sim, atom) # first half of velocity verlet algorithm
-        iprop.pe, iprop.virial = forces(sim, atom) # calculate the forces
+        iprop.pe, iprop.virial, iprop.stress = forces(sim, atom) # calculate the forces
         verlet2(sim, atom) # second half of velocity verlet algorithm
         iprop.ke, iprop.T = ke_and_T(atom) # kinetic and potential energy
         
@@ -114,12 +114,21 @@ def nvemd(sim, atom):
         rdfh=dh.hist(sim.rdfmin, sim.rdfmax,sim.rdfN)
     else:
         rdfh=dh.hist(0.8, 4.0, 100) # this is the default
-        
+
+    # Initialize the pressure tensor correlation function histogram
+    if sim.visc:
+        ttxxh=dh.hist(0, sim.visc, np.int64(sim.visc/sim.dt))
+        ttyyh=dh.hist(0, sim.visc, np.int64(sim.visc/sim.dt))
+        ttzzh=dh.hist(0, sim.visc, np.int64(sim.visc/sim.dt))
+        ttxyh=dh.hist(0, sim.visc, np.int64(sim.visc/sim.dt))
+        ttxzh=dh.hist(0, sim.visc, np.int64(sim.visc/sim.dt))
+        ttyzh=dh.hist(0, sim.visc, np.int64(sim.visc/sim.dt))
+
     # Perform the production steps
     # During production, accumulate all the properties.
     for i in range(1,np.int(sim.pr+1)):
         verlet1(sim, atom) # first half of velocity verlet algorithm
-        iprop.pe, iprop.virial = forces(sim, atom) # calculate the forces
+        iprop.pe, iprop.virial, iprop.stress = forces(sim, atom) # calculate the forces
         verlet2(sim, atom) # second half of velocity verlet algorithm
         iprop.ke, iprop.T = ke_and_T(atom) # kinetic and potential energy
 
@@ -129,6 +138,7 @@ def nvemd(sim, atom):
         aprop.T+=iprop.T
         aprop.virial+=iprop.virial
         aprop.pe2+=iprop.pe*iprop.pe
+        aprop.stress+=iprop.stress
         
         # Output instantaneous properties at the interval
         # specified in the input file.

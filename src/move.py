@@ -91,7 +91,7 @@ def move(sim, atom, iprop):
     # Accept/Reject the move
     if random.uniform(0,1) < np.exp(-de/sim.T): # accept
         iprop.naccept+=1
-        iprop.pe, iprop.virial=forces(sim, atom)
+        iprop.pe, iprop.virial, iprop.stress=forces(sim, atom)
         iprop.pe2=iprop.pe*iprop.pe
         atom[particle].pe=penew # set "current" site pe to new pe 
         return(True)

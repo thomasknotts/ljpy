@@ -54,6 +54,7 @@ def forces(sim,atom):
     # Zero out the system accumulators
     virial=0.0  # virial portion of pressure
     pe=0.0      # potential energy
+    stress=np.zeros(6,dtype=np.float)
        
     # Calculate the forces by looping over all pairs of sites
     for i in range(N-1):
@@ -85,15 +86,25 @@ def forces(sim,atom):
                 fr=48.0*(d14-0.5*d8)
                 
                 # components of forces
-                atom[i].fx=atom[i].fx+fr*dx
-                atom[i].fy=atom[i].fy+fr*dy
-                atom[i].fz=atom[i].fz+fr*dz
-                atom[j].fx=atom[j].fx-fr*dx
-                atom[j].fy=atom[j].fy-fr*dy
-                atom[j].fz=atom[j].fz-fr*dz   
+                fx=fr*dx
+                fy=fr*dy
+                fz=fr*dz
+                atom[i].fx+=fx
+                atom[i].fy+=fy
+                atom[i].fz+=fz
+                atom[j].fx-=fx
+                atom[j].fy-=fy
+                atom[j].fz-=fz
+                stress[0]+=fx*dx
+                stress[1]+=fy*dy
+                stress[2]+=fz*dz
+                stress[3]+=fx*dy
+                stress[4]+=fx*dz
+                stress[5]+=fy*dz
+
                 
                 # virial and potential energy
                 virial=virial+dr2*fr
                 pe=pe+4.0*(d14-d8)*dr2
 
-    return(np.float(pe), np.float(virial))
+    return(np.float(pe), np.float(virial), stress)

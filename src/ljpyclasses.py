@@ -57,10 +57,10 @@ sim_spec = [('method',nb.types.unicode_type), ('T',nb.float64),  \
             ('moviefile',nb.types.unicode_type), ('utail',nb.float64), \
             ('ptail',nb.float64), ('seed',nb.int64), \
             ('seedkeyvalue',nb.types.unicode_type), ('rdfmin',nb.float64), 
-            ('rdfmax',nb.float64), ('rdfN',nb.int64), ('rdf',nb.int64)]
+            ('rdfmax',nb.float64), ('rdfN',nb.int64), ('rdf',nb.int64), ('visc',nb.float64)]
 props_spec = [('ke',nb.float64),  ('pe',nb.float64), ('pe2',nb.float64),   \
              ('T',nb.float64), ('virial',nb.float64), ('naccept',nb.int64), \
-             ('ntry',nb.int64), ('Nhist',nb.int64), ('sxx',nb.float64)]
+             ('ntry',nb.int64), ('Nhist',nb.int64), ('stress',nb.float64[:])]
     
             
 # The class for each site in the system
@@ -114,6 +114,7 @@ class simulation:
         self.rdfmax=0.0         # maximum r value for rdf
         self.rdfN=0             # number of bins for rdf
         self.rdf=0              # frequency to accumulate the rdf
+        self.visc=0.0           # max dimensionless time for stress correlation function
         
 # The class to hold the simulation properties
 @nb.experimental.jitclass(props_spec)
@@ -127,4 +128,5 @@ class props:
         self.naccept=0          # number of mc moves accepted
         self.ntry=0             # number of mc moves tried
         self.Nhist=0            # number of times accumulated
-        self.sxx=0.0            # stress tensor xx
+        self.stress=np.zeros(6,dtype=np.float64) # stress tensor
+                                                 # xx,yy,zz,xy,xz,yz

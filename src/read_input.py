@@ -251,7 +251,24 @@ def readinput(args):
                      "r value.\n(rdf Input File Error)")
         if sim.rdf < 1:
             sys.exit("The interval for keyword \"rdf\" must be "+
-                     "an integer greater than zero.")            
+                     "an integer greater than zero.")
+    # ------- visc keyword ------- #
+    viscget=params.get('visc')
+    if viscget:
+        if sim.method == "mc":
+            print("The keyword \"visc\" is ignored for Monte Carlo simulations\n")
+        else:
+            try:  
+                sim.visc=np.float(params['visc'][0])
+            except ValueError:
+                sys.exit("The \"visc\" keyword require one parameters: the maximum in \n" +
+                          "dimensionless time at which to calculate the time \n" +
+                          "correlation function of the stress tensor.")
+            if sim.visc == 0:
+                sys.exit("The value for the maximum in dimensioness time at which \n" +
+                         "to calculate the correlation function of the stress tensor \n" +
+                         "for keyword \"visc\" in the input file must be > 0. \n" +
+                         "(visc Input File Error)")
             
     sim.inputfile=args[1]
     sim.outputfile=args[2]

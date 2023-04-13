@@ -43,6 +43,7 @@ def finalizefile(sim, atom, aprop, rdfh, rdfcalls):
     pe=aprop.pe/pr
     pe2=aprop.pe2/pr
     virial=aprop.virial/pr
+    stress=aprop.stress/pr
     if sim.method == "md":
         ke=aprop.ke/pr
         T=aprop.T/pr
@@ -100,6 +101,8 @@ def finalizefile(sim, atom, aprop, rdfh, rdfcalls):
         fp.write("\n***Simulation Averages***\n\n")
         fp.write("Temperature:            {:10.6f}\n".format(T))
         fp.write("Pressure:               {:10.6f}\n".format(P))
+        fp.write("Virial:                 {:10.6f}\n".format(virial))
+        fp.write("Stess xx,yy,zz,xy,xz,yz:{:10.6f} {:10.6f} {:10.6f} {:10.6f} {:10.6f} {:10.6f}\n".format(stress[0],stress[1],stress[2],stress[3],stress[4],stress[5]))
         fp.write("Heat Capacity:          {:10.6f}\n".format(cv))
         fp.write("Potential Energy:       {:10.6f}\n".format(pe/N + sim.utail))
         if sim.method == "md":

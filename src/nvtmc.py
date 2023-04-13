@@ -50,7 +50,7 @@ def nvtmc(sim, atom):
     aprop=props()
     
     # Determine the initial properties (Iteration 0) and write to file.
-    iprop.pe, iprop.virial = forces(sim, atom)
+    iprop.pe, iprop.virial, iprop.stress = forces(sim, atom)
     P=sim.rho*sim.T + 1.0/3.0/sim.length**3.0*iprop.virial + sim.ptail
     fp=open(sim.outputfile, "a")
     fp.write("{:<13}    {:13.6f}    {:13.6f}    {:13.6f}\n" \
@@ -119,6 +119,7 @@ def nvtmc(sim, atom):
             aprop.pe+=iprop.pe
             aprop.pe2+=iprop.pe2
             aprop.virial+=iprop.virial
+            aprop.stress+=iprop.stress
         
         # Accumulate the radial distribution function
         if sim.rdf:
