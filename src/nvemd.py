@@ -40,6 +40,8 @@ import numpy as np
 import src.dhist as dh
 from src.rdf import rdf_accumulate
 from src.finalize_file import finalizefile
+from numba.typed import List
+from src.visc import ptensor
 
 def nvemd(sim, atom):
     # Set variables
@@ -117,13 +119,10 @@ def nvemd(sim, atom):
 
     # Initialize the pressure tensor correlation function histogram
     if sim.visc:
-        ttxxh=dh.hist(0, sim.visc, np.int64(sim.visc/sim.dt))
-        ttyyh=dh.hist(0, sim.visc, np.int64(sim.visc/sim.dt))
-        ttzzh=dh.hist(0, sim.visc, np.int64(sim.visc/sim.dt))
-        ttxyh=dh.hist(0, sim.visc, np.int64(sim.visc/sim.dt))
-        ttxzh=dh.hist(0, sim.visc, np.int64(sim.visc/sim.dt))
-        ttyzh=dh.hist(0, sim.visc, np.int64(sim.visc/sim.dt))
-
+        taucorr=List()
+        for i in range(6):
+            taucorr.append(dh.hist(0, sim.visc, np.int64(sim.visc/sim.dt)))
+    
     # Perform the production steps
     # During production, accumulate all the properties.
     for i in range(1,np.int(sim.pr+1)):
@@ -131,7 +130,7 @@ def nvemd(sim, atom):
         iprop.pe, iprop.virial, iprop.stress = forces(sim, atom) # calculate the forces
         verlet2(sim, atom) # second half of velocity verlet algorithm
         iprop.ke, iprop.T = ke_and_T(atom) # kinetic and potential energy
-
+        iprop.press = ptensor(sim,atom,iprop)
         # Accumulate the properties
         aprop.pe+=iprop.pe
         aprop.ke+=iprop.ke
@@ -139,6 +138,7 @@ def nvemd(sim, atom):
         aprop.virial+=iprop.virial
         aprop.pe2+=iprop.pe*iprop.pe
         aprop.stress+=iprop.stress
+        aprop.press+=iprop.press
         
         # Output instantaneous properties at the interval
         # specified in the input file.

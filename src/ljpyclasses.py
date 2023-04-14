@@ -46,7 +46,8 @@ site_spec = [('x',nb.float64),  ('y',nb.float64), ('z',nb.float64),   \
              ('vx',nb.float64), ('vy',nb.float64), ('vz',nb.float64), \
              ('fx',nb.float64), ('fy',nb.float64), ('fz',nb.float64), \
              ('dx',nb.float64), ('dy',nb.float64), ('dz',nb.float64), \
-             ('dr2',nb.float64), ('pe',nb.float64)]
+             ('dr2',nb.float64), ('pe',nb.float64),                   \
+             ('vx0',nb.float64), ('vy0',nb.float64), ('vz0',nb.float64)]
 sim_spec = [('method',nb.types.unicode_type), ('T',nb.float64),  \
             ('rho', nb.float64), ('N',nb.int64), ('eq',nb.int64), \
             ('pr',nb.int64), ('itrr',nb.int64), ('rc',nb.float64), \
@@ -60,7 +61,8 @@ sim_spec = [('method',nb.types.unicode_type), ('T',nb.float64),  \
             ('rdfmax',nb.float64), ('rdfN',nb.int64), ('rdf',nb.int64), ('visc',nb.float64)]
 props_spec = [('ke',nb.float64),  ('pe',nb.float64), ('pe2',nb.float64),   \
              ('T',nb.float64), ('virial',nb.float64), ('naccept',nb.int64), \
-             ('ntry',nb.int64), ('Nhist',nb.int64), ('stress',nb.float64[:])]
+             ('ntry',nb.int64), ('Nhist',nb.int64), ('stress',nb.float64[:]),\
+             ('press',nb.float64[:])]
     
             
 # The class for each site in the system
@@ -81,6 +83,9 @@ class site:
         self.dz=0.0     # z displayement for diffusion (MD)   
         self.dr2=0.0    # MSD accumulator for diffusion (MD)
         self.pe=0.0     # potential energy of site (MC)
+        self.vx0=0.0    # x velocity at time 0 for viscosity (MD)
+        self.vy0=0.0    # y velocity at time 0 for viscosity (MD)
+        self.vz0=0.0    # z velocity at time 0 for viscosity (MD)
         
 
 
@@ -129,4 +134,6 @@ class props:
         self.ntry=0             # number of mc moves tried
         self.Nhist=0            # number of times accumulated
         self.stress=np.zeros(6,dtype=np.float64) # stress tensor
+                                                 # xx,yy,zz,xy,xz,yz
+        self.press=np.zeros(6,dtype=np.float64)  # stress tensor
                                                  # xx,yy,zz,xy,xz,yz
