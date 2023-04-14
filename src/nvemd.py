@@ -31,6 +31,7 @@ This module is part of ljpy. It is the main driver for the NVE MD simulations.
 """
 
 # Import relevant libraries
+from pickletools import TAKEN_FROM_ARGUMENT1
 from src.forces import forces
 from src.kinetic import ke_and_T
 from src.verlet import verlet1, verlet2
@@ -41,7 +42,7 @@ import src.dhist as dh
 from src.rdf import rdf_accumulate
 from src.finalize_file import finalizefile
 from numba.typed import List
-from src.visc import ptensor
+from src.visc import ptensor, tautaucorr_accumulate, traceless, tautaucorr_finalize
 
 def nvemd(sim, atom):
     # Set variables
@@ -118,10 +119,17 @@ def nvemd(sim, atom):
         rdfh=dh.hist(0.8, 4.0, 100) # this is the default
 
     # Initialize the pressure tensor correlation function histogram
+    # tautaucorr[0:5] hold the xx, yy, zz, xy, xz, yz components
+    # tautaucorr[6] holds the number of times each taucorr[0:5] was incremented
+    # so that an average may be determined. The histogram bin values are 
+    # the time.
     if sim.visc:
-        taucorr=List()
-        for i in range(6):
-            taucorr.append(dh.hist(0, sim.visc, np.int64(sim.visc/sim.dt)))
+        tautaucorr=List()
+        time0=0.0
+        tau0=ptensor(sim,atom,iprop)
+        tau0traceless=traceless(tau0)
+        for i in range(7):
+            tautaucorr.append(dh.hist(0, sim.visc, np.int64(sim.visc/sim.dt)))
     
     # Perform the production steps
     # During production, accumulate all the properties.
@@ -162,8 +170,38 @@ def nvemd(sim, atom):
                 Nrdfcalls+=1
                 rdf_accumulate(sim, atom, rdfh)
         
+        # Accumulate the pressure tensor correlation function.
+        # First calculate 
+        if sim.visc:
+            time = i*sim.dt - time0
+            tau = ptensor(sim,atom,iprop)
+            tau=traceless(tau) # make the tensor traceless
+            tautau0 = tau0*tau
+            tautaucorr_accumulate(time, tautau0, tautaucorr)
+            if time==sim.visc: # this resets the zero in time
+                time0=time
+                tau0=tau
+
+        
     # Finalize the output file
     finalizefile(sim, atom, aprop, rdfh, Nrdfcalls)
+
+    # Write the tau*tau0 correlation file
+    for i in range(6): # get the average tautaucorr across the simulation
+        tautaucorr[i]=dh.div(tautaucorr[i], tautaucorr[6]) 
+        finaltautau=tautaucorr_finalize(tautaucorr)
+        fn=sim.outputfile.split('.')[0] + "tautau" + str(i) + "." + sim.outputfile.split('.')[1]
+        fp=open(fn,"w")
+        for j in range(tautaucorr[i].N): 
+            fp.write("{:>10}\t{:13.6f}\t{:13.6f}\n".format(j+1, \
+                     tautaucorr[i].range[j], tautaucorr[i].bin[j]))
+        fp.close()
+    fn=sim.outputfile.split('.')[0] + "tautauave" + "." + sim.outputfile.split('.')[1]
+    fp=open(fn,"w")
+    for j in range(tautaucorr[0].N): 
+        fp.write("{:>10}\t{:13.6f}\t{:13.6f}\n".format(j+1, \
+                  tautaucorr[0].range[j], finaltautau[j]))
+    fp.close()
 
         
     #print("pe = %.2f virial = %.3f ke = %.2f T = %.4f" % (iprop.pe,iprop.virial,iprop.ke,iprop.T))

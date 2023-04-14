@@ -50,8 +50,26 @@ def ptensor(sim,atom,iprop):
         tensor[i]+=iprop.stress[i]
     
     return(tensor/V)
-    
-    
-            
-            
 
+#@njit
+def traceless(x): # return the traceless, symmetric tensor of x
+    trace3=np.sum(x[0:3])/3.0
+    x[0:3] = np.subtract(x[0:3],trace3)
+    return(x)
+
+@njit
+def tautaucorr_accumulate(time, tautau0, tautaucorr):
+    for i in range(6):
+        tautaucorr[i].accumulate(time,tautau0[i])
+    tautaucorr[6].increment(time)
+
+def tautaucorr_finalize(tautaucorr):
+    weight=np.array([4/3,4/3,4/3,1.0,1.0,1.0])
+    x=np.zeros([6,tautaucorr[0].N])
+    for i in range(6):
+        x[i,:]=tautaucorr[i].bin[:]
+    return(np.average(x,axis=0,weights=weight))
+
+
+            
+      
