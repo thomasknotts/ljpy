@@ -65,7 +65,7 @@ def nvemd(sim, atom):
     # During equilibration, the velocities are rescaled periodically
     # to the set point temperature. After equilibration, during production,
     # the velocities are no longer rescaled.
-    for i in range(1,np.int(sim.eq+1)):
+    for i in range(1,np.int64(sim.eq+1)):
         verlet1(sim, atom) # first half of velocity verlet algorithm
         iprop.pe, iprop.virial = forces(sim, atom) # calculate the forces
         verlet2(sim, atom) # second half of velocity verlet algorithm
@@ -117,7 +117,7 @@ def nvemd(sim, atom):
         
     # Perform the production steps
     # During production, accumulate all the properties.
-    for i in range(1,np.int(sim.pr+1)):
+    for i in range(1,np.int64(sim.pr+1)):
         verlet1(sim, atom) # first half of velocity verlet algorithm
         iprop.pe, iprop.virial = forces(sim, atom) # calculate the forces
         verlet2(sim, atom) # second half of velocity verlet algorithm

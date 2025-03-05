@@ -67,7 +67,7 @@ def nvtmc(sim, atom):
     
     # Perform the equilibration steps
     # Each step proposes sim.N moves (one Monte Carlo "sweep").
-    for i in range(1, np.int(sim.eq+1)):
+    for i in range(1, np.int64(sim.eq+1)):
         for j in range(sim.N): # This loop performs sim.N moves per step
             # Propose and accept or reject a move
             move(sim,atom,iprop)
@@ -110,7 +110,7 @@ def nvtmc(sim, atom):
     
     # Perform the production steps
     # During production, accumulate all the properties.    
-    for i in range(1, np.int(sim.pr+1)):
+    for i in range(1, np.int64(sim.pr+1)):
         for j in range(sim.N): # This loop performs sim.N moves per step
             # Propose and accept or reject a move
             move(sim,atom,iprop)

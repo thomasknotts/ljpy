@@ -38,7 +38,7 @@ from numba import njit
 def rdf_accumulate(sim, atom, h):
     # Variables
     hL=sim.length*0.5   # half the box length
-    N=np.int(sim.N)
+    N=np.int64(sim.N)
     
     # Loop around the atoms to calculate the distances
     for i in range(N-1):

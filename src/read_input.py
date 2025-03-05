@@ -103,7 +103,7 @@ def readinput(args):
     if not Tget: sys.exit("The required keyword \"temp\" is missing in the " + 
                           "input file.")
     try:
-        sim.T=np.float(params['temp'][0])
+        sim.T=np.float64(params['temp'][0])
     except ValueError:
         sys.exit("The value of required keyword \"temp\" in the input file " +
                  "is not a valid number.\n")
@@ -113,7 +113,7 @@ def readinput(args):
     if not rhoget: sys.exit("The required keyword \"rho\" is missing in the " + 
                             "input file.")
     try:
-        sim.rho=np.float(params['rho'][0])
+        sim.rho=np.float64(params['rho'][0])
     except ValueError:
         sys.exit("The value of required keyword \"rho\" in the input file " +
                  "is not a valid number.\n")
@@ -143,7 +143,7 @@ def readinput(args):
     if not rcget: sys.exit("The required keyword \"rcut\" is missing in the " + 
                            "input file.")
     try:
-        sim.rc=np.float(params['rcut'][0])
+        sim.rc=np.float64(params['rcut'][0])
     except ValueError:
         sys.exit("The value of required keyword \"rcut\" in the input file " +
                  "is not a valid number.\n")
@@ -155,7 +155,7 @@ def readinput(args):
     if not dtget: sys.exit("The required keyword \"dt\" is missing in the " + 
                            "input file.")
     try:
-        sim.dt=np.float(params['dt'][0])
+        sim.dt=np.float64(params['dt'][0])
     except ValueError:
         sys.exit("The value of required keyword \"dt\" in the input file " +
                  "is not a valid number.\n")
@@ -226,8 +226,8 @@ def readinput(args):
                      "bins\n- the frequency at which to accumulate the " +
                      "histograms\n")
         try:  
-            sim.rdfmin=np.float(params['rdf'][0])
-            sim.rdfmax=np.float(params['rdf'][1])
+            sim.rdfmin=np.float64(params['rdf'][0])
+            sim.rdfmax=np.float64(params['rdf'][1])
             sim.rdfN=np.uint(params['rdf'][2])      
             sim.rdf=np.uint(params['rdf'][3])
         except ValueError:

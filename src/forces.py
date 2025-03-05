@@ -42,8 +42,8 @@ from numba import njit
 @njit
 def forces(sim,atom):
     # Variables
-    hL=np.float(sim.length*0.5)   # half the box length
-    N=np.int(sim.N)
+    hL=np.float64(sim.length*0.5)   # half the box length
+    N=np.int64(sim.N)
     
     # Zero out the force accumulators for each particle
     for i in range(sim.N):
@@ -96,4 +96,4 @@ def forces(sim,atom):
                 virial=virial+dr2*fr
                 pe=pe+4.0*(d14-d8)*dr2
 
-    return(np.float(pe), np.float(virial))
+    return(np.float64(pe), np.float64(virial))

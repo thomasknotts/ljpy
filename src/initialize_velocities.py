@@ -92,9 +92,9 @@ def initializevelocities(sim,atom):
                          "\"\n")
             else:
                 try:
-                    atom[particle].vx = np.float(xyz[0])
-                    atom[particle].vy = np.float(xyz[1])
-                    atom[particle].vz = np.float(xyz[2])
+                    atom[particle].vx = np.float64(xyz[0])
+                    atom[particle].vy = np.float64(xyz[1])
+                    atom[particle].vz = np.float64(xyz[2])
                 except ValueError:
                     sys.exit("There is a problem with the velocities for " +
                              "atom " + str(particle+1) + " in \"" + 

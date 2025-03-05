@@ -119,9 +119,9 @@ def initializepositions(sim):
                          "\"\n")
             else:
                 try:
-                    atom[particle].x = np.float(xyz[0])
-                    atom[particle].y = np.float(xyz[1])
-                    atom[particle].z = np.float(xyz[2])
+                    atom[particle].x = np.float64(xyz[0])
+                    atom[particle].y = np.float64(xyz[1])
+                    atom[particle].z = np.float64(xyz[2])
                 except ValueError:
                     sys.exit("There is a problem with the coordinates for " +
                              "atom " + str(particle+1) + " in \"" + 
