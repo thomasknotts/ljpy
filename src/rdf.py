@@ -32,9 +32,10 @@ radial distrubtion function from the simulation.
 """
 # import relevant libraries
 import numpy as np
+import src.dhist as dh
 from numba import njit
 
-#@njit
+@njit
 def rdf_accumulate(sim, atom, h):
     # Variables
     hL=sim.length*0.5   # half the box length
@@ -63,7 +64,7 @@ def rdf_accumulate(sim, atom, h):
             
             # Increment the histogram for the calculated
             # value of dr
-            h.increment(dr)
+            dh.increment(h, dr)
 
 def rdf_finalize(sim, h, Ncalls):
     # Variables

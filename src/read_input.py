@@ -40,8 +40,8 @@ and the valid values for the keywords are given.
 import numpy as np
 import sys, os
 from src.ljpyclasses import simulation
-from numba import njit
-import numba as nb
+#from numba import njit
+#import numba as nb
 
 # This function is passed sys.argv from the main program
 # It returns an object of type simulation with the values

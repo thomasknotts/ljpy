@@ -32,12 +32,12 @@ the gsl_histogram library.
 """
 import numpy as np
 import numba as nb
-#spec = [('xmin',nb.float64), ('xmax',nb.float64),  \
-#        ('N', nb.int64), ('bin_width',nb.float64), \
-#        ('range',nb.float64[:]), ('mrange',nb.float64[:]), ('bin',nb.int64)]
+spec = [('xmin',nb.float64), ('xmax',nb.float64),  \
+        ('N', nb.int64), ('bin_width',nb.float64), \
+        ('range',nb.float64[:]), ('mrange',nb.float64[:]), ('bin',nb.float64[:])]
             
 # The class for each site in the system
-#@nb.experimental.jitclass(spec)
+@nb.experimental.jitclass(spec)
 class hist(object):   
     def __init__(self, xmin, xmax, N):
         # xmin is the minimum value of x accumulated in the histogram
@@ -60,25 +60,28 @@ class hist(object):
         self.bin=np.zeros(N)
         
         return
-    
-    def accumulate(self, x, weight):
-        if x>=self.xmin and x<self.xmax:
-            index=int((x-self.xmin)/self.bin_width)
-            self.bin[index]+=weight 
-        return
-   
-    def increment(self, x):     
-        self.accumulate(x,1.0)
-        return
-    
-    def write(self,fp):
-        for i in range(self.N): 
-            fp.write("{:>10}\t{:13.6f}\t{:13.6f}\n".format(i+1, \
-                     self.mrange[i], self.bin[i]))
+
     def print(self):
         for i in range(self.N): 
             print("{:>10}\t{:13.6f}\t{:13.6f}\n".format(i+1, \
                   self.mrange[i], self.bin[i]))
+
+@nb.njit
+def accumulate(h, x, weight):
+    if x >= h.xmin and x < h.xmax:
+        index = int((x - h.xmin) / h.bin_width)
+        h.bin[index] += weight
+        return(0)
+
+@nb.njit
+def increment(h, x):
+    accumulate(h, x, 1.0)
+    return(0)
+
+def write(h,fp):
+    for i in range(h.N): 
+        fp.write("{:>10}\t{:13.6f}\t{:13.6f}\n".format(i+1, \
+                    h.mrange[i], h.bin[i]))
 
 def clone(src):
     xmin=src.xmin

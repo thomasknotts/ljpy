@@ -1,0 +1,139 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\tak6\\Documents\\GitHub\\ljpy\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{1FF565E5-D57E-40C7-A7D8-DA7E9CE92DEB}|ljpy.pyproj|C:\\Users\\tak6\\Documents\\GitHub\\ljpy\\src\\dhist.py||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{1FF565E5-D57E-40C7-A7D8-DA7E9CE92DEB}|ljpy.pyproj|solutionrelative:src\\dhist.py||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1FF565E5-D57E-40C7-A7D8-DA7E9CE92DEB}|ljpy.pyproj|C:\\Users\\tak6\\Documents\\GitHub\\ljpy\\src\\finalize_file.py||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{1FF565E5-D57E-40C7-A7D8-DA7E9CE92DEB}|ljpy.pyproj|solutionrelative:src\\finalize_file.py||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1FF565E5-D57E-40C7-A7D8-DA7E9CE92DEB}|ljpy.pyproj|C:\\Users\\tak6\\Documents\\GitHub\\ljpy\\src\\nvemd.py||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{1FF565E5-D57E-40C7-A7D8-DA7E9CE92DEB}|ljpy.pyproj|solutionrelative:src\\nvemd.py||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1FF565E5-D57E-40C7-A7D8-DA7E9CE92DEB}|ljpy.pyproj|C:\\Users\\tak6\\Documents\\GitHub\\ljpy\\src\\rdf.py||{8B382828-6202-11D1-8870-0000F87579D2}|",
+      "RelativeMoniker": "D:0:0:{1FF565E5-D57E-40C7-A7D8-DA7E9CE92DEB}|ljpy.pyproj|solutionrelative:src\\rdf.py||{8B382828-6202-11D1-8870-0000F87579D2}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1FF565E5-D57E-40C7-A7D8-DA7E9CE92DEB}|ljpy.pyproj|C:\\Users\\tak6\\Documents\\GitHub\\ljpy\\src\\forces.py||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{1FF565E5-D57E-40C7-A7D8-DA7E9CE92DEB}|ljpy.pyproj|solutionrelative:src\\forces.py||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1FF565E5-D57E-40C7-A7D8-DA7E9CE92DEB}|ljpy.pyproj|C:\\Users\\tak6\\Documents\\GitHub\\ljpy\\ljpy.py||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{1FF565E5-D57E-40C7-A7D8-DA7E9CE92DEB}|ljpy.pyproj|solutionrelative:ljpy.py||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1FF565E5-D57E-40C7-A7D8-DA7E9CE92DEB}|ljpy.pyproj|C:\\Users\\tak6\\Documents\\GitHub\\ljpy\\src\\ljpyclasses.py||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{1FF565E5-D57E-40C7-A7D8-DA7E9CE92DEB}|ljpy.pyproj|solutionrelative:src\\ljpyclasses.py||{8B382828-6202-11D1-8870-0000F87579D2}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 5,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ljpyclasses.py",
+              "DocumentMoniker": "C:\\Users\\tak6\\Documents\\GitHub\\ljpy\\src\\ljpyclasses.py",
+              "RelativeDocumentMoniker": "src\\ljpyclasses.py",
+              "ToolTip": "C:\\Users\\tak6\\Documents\\GitHub\\ljpy\\src\\ljpyclasses.py",
+              "RelativeToolTip": "src\\ljpyclasses.py",
+              "ViewState": "AgIAABgAAAAAAAAAAAAAADUAAABUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-03-24T16:43:59.074Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "forces.py",
+              "DocumentMoniker": "C:\\Users\\tak6\\Documents\\GitHub\\ljpy\\src\\forces.py",
+              "RelativeDocumentMoniker": "src\\forces.py",
+              "ToolTip": "C:\\Users\\tak6\\Documents\\GitHub\\ljpy\\src\\forces.py",
+              "RelativeToolTip": "src\\forces.py",
+              "ViewState": "AgIAACEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-03-24T16:42:02.222Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "rdf.py",
+              "DocumentMoniker": "C:\\Users\\tak6\\Documents\\GitHub\\ljpy\\src\\rdf.py",
+              "RelativeDocumentMoniker": "src\\rdf.py",
+              "ToolTip": "C:\\Users\\tak6\\Documents\\GitHub\\ljpy\\src\\rdf.py",
+              "RelativeToolTip": "src\\rdf.py",
+              "ViewState": "AgIAABIAAAAAAAAAAIAwwEIAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-03-24T16:39:10.168Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "nvemd.py",
+              "DocumentMoniker": "C:\\Users\\tak6\\Documents\\GitHub\\ljpy\\src\\nvemd.py",
+              "RelativeDocumentMoniker": "src\\nvemd.py",
+              "ToolTip": "C:\\Users\\tak6\\Documents\\GitHub\\ljpy\\src\\nvemd.py",
+              "RelativeToolTip": "src\\nvemd.py",
+              "ViewState": "AgIAAFMAAAAAAAAAAIAwwHsAAABJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-03-24T16:37:54.196Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "finalize_file.py",
+              "DocumentMoniker": "C:\\Users\\tak6\\Documents\\GitHub\\ljpy\\src\\finalize_file.py",
+              "RelativeDocumentMoniker": "src\\finalize_file.py",
+              "ToolTip": "C:\\Users\\tak6\\Documents\\GitHub\\ljpy\\src\\finalize_file.py",
+              "RelativeToolTip": "src\\finalize_file.py",
+              "ViewState": "AgIAADwAAAAAAAAAAAAAAFoAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-03-24T16:37:41.224Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "dhist.py",
+              "DocumentMoniker": "C:\\Users\\tak6\\Documents\\GitHub\\ljpy\\src\\dhist.py",
+              "RelativeDocumentMoniker": "src\\dhist.py",
+              "ToolTip": "C:\\Users\\tak6\\Documents\\GitHub\\ljpy\\src\\dhist.py",
+              "RelativeToolTip": "src\\dhist.py",
+              "ViewState": "AgIAACQAAAAAAAAAAAAAAFQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-03-24T16:37:36.51Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ljpy.py",
+              "DocumentMoniker": "C:\\Users\\tak6\\Documents\\GitHub\\ljpy\\ljpy.py",
+              "RelativeDocumentMoniker": "ljpy.py",
+              "ToolTip": "C:\\Users\\tak6\\Documents\\GitHub\\ljpy\\ljpy.py",
+              "RelativeToolTip": "ljpy.py",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAADoAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-03-24T16:37:20.204Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

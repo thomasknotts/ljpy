@@ -53,8 +53,7 @@ also refer to the included documentation.
 #import numpy as np
 import sys, random, time
 from datetime import datetime
-import numpy as np
-
+#import numpy as np
 #from ljpyclasses import simulation, site, props
 #from src.ljpyclasses import site
 from src.read_input import readinput

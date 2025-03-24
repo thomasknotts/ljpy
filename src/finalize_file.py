@@ -33,6 +33,7 @@ in the output file.
 
 # Import relevant libraries
 from src.rdf import rdf_finalize
+import src.dhist as dh
 
 def finalizefile(sim, atom, aprop, rdfh, rdfcalls):
     # Variables
@@ -88,7 +89,7 @@ def finalizefile(sim, atom, aprop, rdfh, rdfcalls):
     if sim.rdf:
         fp.write("\n***Radial Distribution Function***\n\n");
         rdf_finalize(sim, rdfh, rdfcalls)
-        rdfh.write(fp)
+        dh.write(rdfh, fp)
 
 
     if sim.pr > 0:
