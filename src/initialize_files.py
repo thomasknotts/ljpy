@@ -87,8 +87,8 @@ def initializefiles(sim,atom):
         fi.write("coord       " + sim.icoord + "\n")
     if sim.ivel != None:
         fi.write("vel         " + sim.ivel + "\n")
-    if sim.moviefile != None:
-        fi.write("movie       " + sim.moviefile + "  " + str(sim.movie) + "\n")
+#    if sim.moviefile != None:
+#        fi.write("movie       " + sim.moviefile + "  " + str(sim.movie) + "\n")
     if sim.rdf != 0:
         fi.write("rdf         " + str(sim.rdfmin) + "  " +
                  str(sim.rdfmax) + "  " + str(sim.rdfN) +"  " +

@@ -69,7 +69,7 @@ def initializevelocities(sim,atom):
     # If a file with velocities is supplied, read the velocities.
     else:
         # Check if the specified input file exists.
-        print("Reading velocities from ", sim.ivel)
+        print("Reading velocities from ", sim.ivel + "\n")
         if not os.path.isfile(sim.ivel): 
             print("Input file \"" + sim.ivel +"\" does not exist.\n")
             sys.exit("Error: Specified velocity file missing.")

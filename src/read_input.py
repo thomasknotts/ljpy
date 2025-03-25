@@ -200,21 +200,21 @@ def readinput(args):
         sim.seed=-8293867282831
     
     # ------- movie keyword ------- #
-    movieget=params.get('movie')
-    if movieget: 
-        try:  
-            sim.movie=np.uint(params['movie'][1])
-        except (ValueError, IndexError):
-            sys.exit("The value for the interval of keyword \"movie\" in " +
-                     "the input file is missing or is not a valid integer.\n")
-        if sim.movie == 0:
-            sys.exit("The value for the interval of keyword \"movie\" in " +
-                     "the input file must be an integer greater than zero.\n")            
-        try:
-            sim.moviefile=params['movie'][0]
-        except ValueError:
-            sys.exit("The name for the movie file is either missing in the " +
-                     "the input file or is not valid.\n")                
+#    movieget=params.get('movie')
+#    if movieget: 
+#        try:  
+#            sim.movie=np.uint(params['movie'][1])
+#        except (ValueError, IndexError):
+#            sys.exit("The value for the interval of keyword \"movie\" in " +
+#                     "the input file is missing or is not a valid integer.\n")
+#        if sim.movie == 0:
+#            sys.exit("The value for the interval of keyword \"movie\" in " +
+#                     "the input file must be an integer greater than zero.\n")            
+#        try:
+#            sim.moviefile=params['movie'][0]
+#        except ValueError:
+#            sys.exit("The name for the movie file is either missing in the " +
+#                     "the input file or is not valid.\n")                
 
     # -------- rdf keyword -------- #
     rdfget=params.get('rdf')
