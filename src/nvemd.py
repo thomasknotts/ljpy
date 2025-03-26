@@ -50,16 +50,16 @@ def nvemd(sim, atom):
     aprop=props()
     
     # Determine the initial properties (Iteration 0) and write to file.
-    iprop.pe, iprop.virial = forces(sim, atom)
-    iprop.ke, iprop.T = ke_and_T(atom)
-    P=sim.rho*iprop.T + 1.0/3.0/sim.length**3.0*iprop.virial + sim.ptail
-    fp=open(sim.outputfile, "a")
-    fp.write("{:<13}    {:13.6f}    {:13.6f}    {:13.6f}    {:13.6f}    " \
-             "{:13.6f}    {:13.6f}    {:13.6f}\n" \
-             .format(0, iprop.T, iprop.T, P, P, iprop.ke/sim.N, \
-                     iprop.pe/sim.N + sim.utail, \
-                     (iprop.ke + iprop.pe)/sim.N + sim.utail))
-    fp.close()
+    #iprop.pe, iprop.virial = forces(sim, atom)
+    #iprop.ke, iprop.T = ke_and_T(atom)
+    #P=sim.rho*iprop.T + 1.0/3.0/sim.length**3.0*iprop.virial + sim.ptail
+    #fp=open(sim.outputfile, "a")
+    #fp.write("{:<13}    {:13.6f}    {:13.6f}    {:13.6f}    {:13.6f}    " \
+    #         "{:13.6f}    {:13.6f}    {:13.6f}\n" \
+    #         .format(0, iprop.T, iprop.T, P, P, iprop.ke/sim.N, \
+    #                 iprop.pe/sim.N + sim.utail, \
+    #                 (iprop.ke + iprop.pe)/sim.N + sim.utail))
+    #fp.close()
 
     # Perform equilibration steps
     # During equilibration, the velocities are rescaled periodically

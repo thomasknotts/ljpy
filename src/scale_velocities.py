@@ -36,10 +36,12 @@ correct NVT distribution of velocities.
 
 # Import relevant libraries
 import numpy as np
+from numba import njit
 
 # This function is passed the simulation object, a list of site objects and 
 # the desired temperature.
 # It scales the velocities to the desired temperature.
+@njit
 def scalevelocities(sim,atom,temp):
     scale=np.sqrt(sim.T/temp)
     for i in range(sim.N):

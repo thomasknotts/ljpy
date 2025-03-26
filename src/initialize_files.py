@@ -32,6 +32,10 @@ such as the simulations parameters, the initial positions, and the
 initial velocities 
 """
 
+# Import relevant libraries
+from src.forces import forces
+from src.kinetic import ke_and_T
+
 def initializefiles(sim,atom):
     
     # Initialize the movie files.
@@ -115,8 +119,22 @@ def initializefiles(sim,atom):
         fi.write("\n\nIteration                T              T Ave.       " +
                  "       P              P Ave.            KE               " +
                  "PE               TE\n\n")
-    else: fi.write("\n\nIteration                P              P Ave. " +
-                       "             PE\n\n") 
+        # Determine the initial properties (Iteration 0) and write to file.
+        pe, virial = forces(sim, atom)
+        ke, T = ke_and_T(atom)
+        P=sim.rho*T + 1.0/3.0/sim.length**3.0*virial + sim.ptail
+        fi.write("{:<13}    {:13.6f}    {:13.6f}    {:13.6f}    {:13.6f}    " \
+             "{:13.6f}    {:13.6f}    {:13.6f}\n".format(0, T, T, P, P, ke/sim.N, \
+                     pe/sim.N + sim.utail, (ke + pe)/sim.N + sim.utail))
+    else: 
+        fi.write("\n\nIteration                P              P Ave. " +
+                       "             PE\n\n")
+        # Determine the initial properties (Iteration 0) and write to file.
+        pe, virial = forces(sim, atom)
+        P=sim.rho*sim.T + 1.0/3.0/sim.length**3.0*virial + sim.ptail
+        fi.write("{:<13}    {:13.6f}    {:13.6f}    {:13.6f}\n" \
+                 .format(0, P, P, pe/sim.N + sim.utail))
+        
     fi.close()
     
     

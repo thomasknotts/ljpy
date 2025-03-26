@@ -38,12 +38,13 @@ import random
 import numpy as np
 from src.atomic_pe import atomic_pe
 from src.forces import forces
-
+from numba import njit
 
 # This function accepts a simulation object, a list of site objects, the
 # current state of the random number generator, and a property object.
 # It returns True if the move is accepted. It returns False if the move is
 # rejected.
+@njit
 def move(sim, atom, iprop):
     # Set the state of the random number generator
     
