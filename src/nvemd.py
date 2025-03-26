@@ -43,7 +43,7 @@ from src.finalize_file import finalizefile
 
 def nvemd(sim, atom):
     # Set variables
-    rescale_freq=100
+    rescale_freq=10
     
     # Create objects for the instanteous and average properties
     iprop=props()
