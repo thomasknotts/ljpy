@@ -260,10 +260,10 @@ def readinput(args):
                                          sim.rc**(-3.0))
     sim.ptail = 16.0 / 3.0*np.pi*sim.rho*sim.rho*(2.0 / 3.0 * sim.rc**(-9.0) -
                                                   sim.rc**(-3.0))
-    
+
+    if rdfget:
+        if sim.rdfmax > sim.length * 0.5:
+            sys.exit("The max length of the rdf cannot be greater than half the \
+            box length (L/2=%.3lf).\n" % (sim.length * 0.5))
+
     return sim
-
-
-
-
-
