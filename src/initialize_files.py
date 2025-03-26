@@ -99,7 +99,9 @@ def initializefiles(sim,atom):
                  str(sim.rdf) + "\n")
     fi.write("\n")
 
-    fi.write("Calculated Box Length:     {:.8f}\n".format(sim.length))
+    fi.write("    ***Calculated Parameters***\n")
+    fi.write("Box Length:                 {:.8f}\n".format(sim.length))
+    fi.write("Half Box Length:            {:.8f}\n".format(sim.length/2.0))
     fi.write("Energy Tail Correction:    {:.8f}\n".format(sim.utail))
     fi.write("Pressure Tail Correction:  {:.8f}\n".format(sim.ptail))
 
