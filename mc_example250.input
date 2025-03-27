@@ -1,0 +1,12 @@
+sim     mc                # simulation type; required [md or mc]
+N       250               # number of particles; required
+temp    1.1               # temperature (dimensionless); required
+rho     0.85              # density (dimensionless); required
+esteps  200               # equilibrium steps; required 
+psteps  400               # production steps; required
+rcut    2.5               # Lennard-Jones cut off (dimensionless length); required
+dt      0.1               # time step for md (dimensionless time) or max delta for mc (dimensionless length); required
+coord   n250t110r085.cor  # initial coordinates ["generate" or file name]; optional
+output  2                 # frequency for output of instantaneous props; optional
+seed    -123              # seed value for random number generator; optional ["generate" or negative number]
+rdf     0.8 3.3 100 4     # calculate rdf; optional [rmin, rmax, number of bins, frequency for accumulation]
